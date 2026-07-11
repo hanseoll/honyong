@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#f58ab4">
+  <title>한설 방송용 페이지 · 관리자</title>
+  <style>
+    :root{
+      --bg:#fff8fc;--paper:#fff;--ink:#4c3b5f;--muted:#87778f;
+      --line:#ead9e5;--pink:#f184b0;--pink2:#fce8f1;--purple:#8d6ccf;
+      --lav:#f1ebff;--green:#3b9a67;--red:#c45570;
+      font-family:Pretendard,"Noto Sans KR",system-ui,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;color:var(--ink);background:
+      radial-gradient(circle at 12% 6%,rgba(241,132,176,.16),transparent 25%),
+      radial-gradient(circle at 90% 10%,rgba(141,108,207,.14),transparent 27%),
+      var(--bg)}
+    button,input,select,textarea{font:inherit}
+    .shell{width:min(1120px,calc(100% - 28px));margin:24px auto 70px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:18px 20px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.9);
+      box-shadow:0 12px 34px rgba(76,59,95,.08);backdrop-filter:blur(16px)}
+    .brand b{display:block;font-size:19px}.brand small{color:var(--muted)}
+    .status{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800}
+    .dot{width:10px;height:10px;border-radius:50%;background:#bbb}
+    .dot.ok{background:var(--green)}.dot.bad{background:var(--red)}
+    .notice{margin:16px 0;padding:14px 17px;border:1px solid #f2d7e4;border-radius:16px;background:#fff4f8;
+      font-size:13px;line-height:1.65}
+    .setup{margin:16px 0 22px;border:1px solid var(--line);border-radius:18px;background:var(--paper);overflow:hidden}
+    .setup summary{cursor:pointer;padding:15px 18px;font-weight:900}
+    .setup-body{padding:0 18px 18px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .field{display:grid;gap:7px}.field.full{grid-column:1/-1}
+    label{font-size:13px;font-weight:900}
+    input,select,textarea{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 12px;
+      color:var(--ink);background:white;outline:none}
+    textarea{min-height:100px;resize:vertical}
+    input:focus,select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(241,132,176,.11)}
+    .save-settings{margin-top:12px}
+    .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+    .tab{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:white;color:var(--ink);
+      font-weight:900;cursor:pointer}
+    .tab.active{border-color:transparent;color:white;background:linear-gradient(135deg,var(--pink),var(--purple))}
+    .panel{display:none;padding:22px;border:1px solid var(--line);border-radius:22px;background:var(--paper);
+      box-shadow:0 12px 34px rgba(76,59,95,.07)}
+    .panel.active{display:block}
+    .panel h2{margin:0 0 7px}.panel .desc{margin:0 0 20px;color:var(--muted);font-size:14px}
+    .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+    .primary,.secondary,.danger{border:0;border-radius:13px;padding:11px 16px;font-weight:900;cursor:pointer}
+    .primary{color:white;background:linear-gradient(135deg,var(--pink),var(--purple))}
+    .secondary{color:var(--ink);background:var(--lav);border:1px solid var(--line)}
+    .danger{color:white;background:var(--red)}
+    button:disabled{opacity:.5;cursor:not-allowed}
+    .debt-tools{display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:16px}
+    .debt-list{display:grid;gap:10px;max-height:520px;overflow:auto;padding-right:3px}
+    .person{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}
+    .person-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}
+    .person-head b{font-size:16px}.total{color:var(--purple);font-size:13px;font-weight:900}
+    .chips{display:flex;flex-wrap:wrap;gap:7px}
+    .chip{border-radius:999px;padding:6px 10px;background:var(--pink2);font-size:12px;font-weight:900}
+    .result{margin-top:15px;min-height:44px;padding:12px 14px;border-radius:14px;background:#f7f4fa;
+      color:var(--muted);font-size:13px;line-height:1.55}
+    .result.ok{color:#24734b;background:#eaf8f0}.result.bad{color:#a13d55;background:#fff0f3}
+    .tiny{color:var(--muted);font-size:12px;line-height:1.55}
+    iframe{display:none}
+    @media(max-width:720px){
+      .shell{width:min(100% - 18px,1120px);margin-top:10px}
+      .topbar{align-items:flex-start;flex-direction:column}
+      .grid{grid-template-columns:1fr}
+      .field.full{grid-column:auto}
+      .debt-tools{grid-template-columns:1fr}
+      .panel{padding:17px}
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><b>한설 방송용 페이지 · 관리자</b><small>공개 홈페이지에는 이 페이지 링크가 표시되지 않습니다.</small></div>
+      <div class="status"><span id="statusDot" class="dot"></span><span id="statusText">설정 확인 중</span></div>
+    </header>
+
+    <div class="notice">
+      이 페이지는 주소를 아는 사람만 열 수 있지만, 주소 자체가 비밀번호는 아닙니다.
+      아래 관리자 비밀번호는 Google Apps Script에서 검사합니다. 관리자 주소와 비밀번호를 외부에 공개하지 마세요.
+    </div>
+
+    <details class="setup" open>
+      <summary>처음 한 번만 하는 연결 설정</summary>
+      <div class="setup-body">
+        <div class="grid">
+          <div class="field full">
+            <label for="apiUrl">Apps Script 웹 앱 주소</label>
+            <input id="apiUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec">
+          </div>
+          <div class="field">
+            <label for="adminSecret">관리자 비밀번호</label>
+            <input id="adminSecret" type="password" autocomplete="current-password">
+          </div>
+          <div class="field">
+            <label for="rememberSecret">비밀번호 저장</label>
+            <select id="rememberSecret">
+              <option value="yes">이 컴퓨터에 저장</option>
+              <option value="no">현재 창에서만 사용</option>
+            </select>
+          </div>
+        </div>
+        <button id="saveSettings" class="secondary save-settings" type="button">설정 저장·연결 확인</button>
+        <p class="tiny">공용 컴퓨터에서는 비밀번호 저장을 사용하지 마세요.</p>
+      </div>
+    </details>
+
+    <nav class="tabs" aria-label="관리 기능">
+      <button class="tab active" data-panel="debtPanel" type="button">업보 관리</button>
+      <button class="tab" data-panel="honyoPanel" type="button">호뇽단</button>
+      <button class="tab" data-panel="noticePanel" type="button">공지</button>
+      <button class="tab" data-panel="schedulePanel" type="button">스케줄</button>
+      <button class="tab" data-panel="gamePanel" type="button">게임</button>
+    </nav>
+
+    <section id="debtPanel" class="panel active">
+      <h2>업보 빠른 수정</h2>
+      <p class="desc">같은 닉네임과 같은 업보 종류는 자동으로 한 줄로 합쳐집니다. 결과가 0 이하이면 해당 업보 행이 삭제됩니다.</p>
+      <form id="debtForm">
+        <div class="grid">
+          <div class="field">
+            <label for="debtNickname">닉네임</label>
+            <input id="debtNickname" name="nickname" required list="nicknameList" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="debtType">업보 종류</label>
+            <select id="debtType" name="debtType" required></select>
+          </div>
+          <div class="field">
+            <label for="debtAmount">수량</label>
+            <input id="debtAmount" name="amount" type="number" min="1" value="1" required>
+          </div>
+          <div class="field">
+            <label for="debtMode">처리 방식</label>
+            <select id="debtMode" name="mode">
+              <option value="add">추가하기 (+)</option>
+              <option value="subtract">수행해서 차감 (-)</option>
+              <option value="set">남은 개수로 직접 변경</option>
+            </select>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="primary" type="submit">업보 저장</button>
+          <button id="loadDebts" class="secondary" type="button">현재 목록 새로고침</button>
+        </div>
+      </form>
+      <div id="debtResult" class="result">연결 설정 후 현재 업보를 불러올 수 있어요.</div>
+      <div class="debt-tools">
+        <input id="adminDebtSearch" type="search" placeholder="현재 업보에서 닉네임 검색">
+        <button id="refreshDebtView" class="secondary" type="button">목록 불러오기</button>
+      </div>
+      <div id="adminDebtList" class="debt-list"></div>
+    </section>
+
+    <section id="honyoPanel" class="panel">
+      <h2>호뇽단 등록</h2>
+      <p class="desc">같은 닉네임이 이미 있으면 선언문 사진 주소를 수정합니다.</p>
+      <form id="honyoForm">
+        <div class="grid">
+          <div class="field"><label for="honyoNickname">닉네임</label><input id="honyoNickname" name="nickname" required list="nicknameList"></div>
+          <div class="field"><label for="honyoId">아이디(선택)</label><input id="honyoId" name="fanId"></div>
+          <div class="field full"><label for="statementImage">본진선언문 사진 주소</label><input id="statementImage" name="statementImage" type="url" required></div>
+          <div class="field full"><label for="honyoMemo">메모(선택)</label><input id="honyoMemo" name="memo"></div>
+        </div>
+        <div class="actions"><button class="primary" type="submit">호뇽단 저장</button></div>
+      </form>
+      <div id="honyoResult" class="result">닉네임과 사진 주소를 입력하세요.</div>
+    </section>
+
+    <section id="noticePanel" class="panel">
+      <h2>공지 등록</h2>
+      <form id="noticeForm">
+        <div class="grid">
+          <div class="field"><label for="noticeCategory">분류</label><select id="noticeCategory" name="category"><option>공지</option><option>이벤트</option><option>업데이트</option></select></div>
+          <div class="field"><label for="noticePinned">상단 고정</label><select id="noticePinned" name="pinned"><option value="">고정 안 함</option><option value="고정">고정</option></select></div>
+          <div class="field full"><label for="noticeTitle">제목</label><input id="noticeTitle" name="title" required></div>
+          <div class="field full"><label for="noticeContent">내용</label><textarea id="noticeContent" name="content" required></textarea></div>
+        </div>
+        <div class="actions"><button class="primary" type="submit">공지 추가</button></div>
+      </form>
+      <div id="noticeResult" class="result">새 공지는 표시 상태로 추가됩니다.</div>
+    </section>
+
+    <section id="schedulePanel" class="panel">
+      <h2>스케줄 등록</h2>
+      <form id="scheduleForm">
+        <div class="grid">
+          <div class="field"><label for="scheduleDate">날짜</label><input id="scheduleDate" name="date" type="date" required></div>
+          <div class="field"><label for="scheduleTime">시간</label><input id="scheduleTime" name="time" placeholder="20:00 또는 휴방" required></div>
+          <div class="field"><label for="scheduleType">종류</label><select id="scheduleType" name="type"><option>방송</option><option>휴방</option><option>이벤트</option><option>기타</option></select></div>
+          <div class="field"><label for="scheduleTitle">제목</label><input id="scheduleTitle" name="title" required></div>
+          <div class="field full"><label for="scheduleMemo">메모(선택)</label><input id="scheduleMemo" name="memo"></div>
+        </div>
+        <div class="actions"><button class="primary" type="submit">스케줄 추가</button></div>
+      </form>
+      <div id="scheduleResult" class="result">등록된 스케줄은 표시 상태로 추가됩니다.</div>
+    </section>
+
+    <section id="gamePanel" class="panel">
+      <h2>게임 추가·수정</h2>
+      <p class="desc">같은 게임 제목이 있으면 해당 행을 수정하고, 없으면 새로 추가합니다.</p>
+      <form id="gameForm">
+        <div class="grid">
+          <div class="field"><label for="gameTitle">게임 제목</label><input id="gameTitle" name="title" required></div>
+          <div class="field"><label for="gameStatus">상태</label><select id="gameStatus" name="status"><option>하는 중</option><option>할 게임</option><option>했던 게임</option></select></div>
+          <div class="field"><label for="gameProgress">진행도 문구</label><input id="gameProgress" name="progress" placeholder="챕터 3 / 완료 / 예정"></div>
+          <div class="field"><label for="gamePercent">진행률(0~100)</label><input id="gamePercent" name="progressPercent" type="number" min="0" max="100" value="0"></div>
+          <div class="field full"><label for="gameImage">이미지 주소(선택)</label><input id="gameImage" name="image" type="url"></div>
+          <div class="field full"><label for="gameMemo">메모(선택)</label><input id="gameMemo" name="memo"></div>
+        </div>
+        <div class="actions"><button class="primary" type="submit">게임 저장</button></div>
+      </form>
+      <div id="gameResult" class="result">게임 제목을 기준으로 추가 또는 수정합니다.</div>
+    </section>
+
+    <datalist id="nicknameList"></datalist>
+    <iframe id="apiFrame" name="apiFrame" title="관리 작업 처리"></iframe>
+    <form id="apiForm" method="post" target="apiFrame"></form>
+  </main>
+
+<script>
+const DEBT_TYPES = [
+  "똥글","매도","노래","원하는 대사","애교","포스트잇","단컷 방셀","즉석 방셀",
+  "일반프사","하단배너","플로팅배너","시참권(3판)","AI 그림","B컷 방셀",
+  "한정 단컷","네컷 방셀","정성 방셀","움짤 방셀","영상 방셀","상단배너","원하는 방셀"
+];
+const $ = id => document.getElementById(id);
+let sessionSecret = "";
+let debtData = [];
+let pending = new Map();
+
+function getSettings(){
+  return {
+    apiUrl: localStorage.getItem("honyong-admin-api") || "",
+    secret: sessionSecret || localStorage.getItem("honyong-admin-secret") || ""
+  };
+}
+function setStatus(ok,text){
+  $("statusDot").className = "dot " + (ok ? "ok" : "bad");
+  $("statusText").textContent = text;
+}
+function setResult(id,message,ok=true){
+  const box=$(id);
+  box.textContent=message;
+  box.className="result " + (ok?"ok":"bad");
+}
+function saveSettings(){
+  const apiUrl=$("apiUrl").value.trim();
+  const secret=$("adminSecret").value;
+  localStorage.setItem("honyong-admin-api",apiUrl);
+  if($("rememberSecret").value==="yes"){
+    localStorage.setItem("honyong-admin-secret",secret);
+    sessionSecret="";
+  }else{
+    localStorage.removeItem("honyong-admin-secret");
+    sessionSecret=secret;
+  }
+  if(!apiUrl||!secret){
+    setStatus(false,"주소와 비밀번호 필요");
+    return;
+  }
+  setStatus(false,"연결 확인 중");
+  callApi("ping",{}).then(()=>{
+    setStatus(true,"관리 API 연결됨");
+    loadDebts();
+  }).catch(error=>setStatus(false,error.message));
+}
+function callApi(action,data){
+  const {apiUrl,secret}=getSettings();
+  if(!apiUrl) return Promise.reject(new Error("Apps Script 주소를 먼저 입력하세요."));
+  if(!secret) return Promise.reject(new Error("관리자 비밀번호를 입력하세요."));
+  const requestId=crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+Math.random();
+  return new Promise((resolve,reject)=>{
+    const timer=setTimeout(()=>{
+      pending.delete(requestId);
+      reject(new Error("응답 시간이 초과됐어요. Apps Script 배포 설정을 확인하세요."));
+    },20000);
+    pending.set(requestId,{resolve,reject,timer});
+    const form=$("apiForm");
+    form.action=apiUrl;
+    form.innerHTML="";
+    const payload={action,secret,requestId,...data};
+    Object.entries(payload).forEach(([key,value])=>{
+      const input=document.createElement("input");
+      input.type="hidden";input.name=key;input.value=value??"";
+      form.appendChild(input);
+    });
+    form.submit();
+  });
+}
+window.addEventListener("message",event=>{
+  const msg=event.data;
+  if(!msg||msg.source!=="honyong-admin"||!msg.requestId)return;
+  const task=pending.get(msg.requestId);
+  if(!task)return;
+  clearTimeout(task.timer);pending.delete(msg.requestId);
+  if(msg.ok)task.resolve(msg.data);
+  else task.reject(new Error(msg.error||"처리에 실패했어요."));
+});
+
+function serializeForm(form){
+  return Object.fromEntries(new FormData(form).entries());
+}
+function bindForm(formId,action,resultId,successText,after){
+  $(formId).addEventListener("submit",async event=>{
+    event.preventDefault();
+    const button=event.submitter;
+    if(button)button.disabled=true;
+    setResult(resultId,"저장 중…",true);
+    try{
+      const data=await callApi(action,serializeForm(event.currentTarget));
+      setResult(resultId,typeof successText==="function"?successText(data):successText,true);
+      if(after)after(data,event.currentTarget);
+    }catch(error){
+      setResult(resultId,error.message,false);
+    }finally{
+      if(button)button.disabled=false;
+    }
+  });
+}
+function groupedDebts(rows){
+  const map=new Map();
+  rows.forEach(row=>{
+    const name=row.nickname||"이름 없음";
+    if(!map.has(name))map.set(name,{nickname:name,total:0,items:[]});
+    const person=map.get(name);
+    person.total+=Number(row.count)||0;
+    person.items.push({type:row.type,count:Number(row.count)||0});
+  });
+  return [...map.values()].sort((a,b)=>a.nickname.localeCompare(b.nickname,"ko"));
+}
+function renderDebts(){
+  const q=$("adminDebtSearch").value.trim().toLowerCase();
+  const people=groupedDebts(debtData).filter(p=>!q||p.nickname.toLowerCase().includes(q));
+  $("adminDebtList").innerHTML=people.length?people.map(p=>`
+    <article class="person">
+      <div class="person-head"><b>${escapeHtml(p.nickname)}</b><span class="total">총 ${p.total}개</span></div>
+      <div class="chips">${p.items.sort((a,b)=>a.type.localeCompare(b.type,"ko")).map(i=>`<span class="chip">${escapeHtml(i.type)} ×${i.count}</span>`).join("")}</div>
+    </article>`).join(""):`<div class="result">현재 표시할 업보가 없어요.</div>`;
+  $("nicknameList").innerHTML=people.map(p=>`<option value="${escapeHtml(p.nickname)}"></option>`).join("");
+}
+async function loadDebts(){
+  setResult("debtResult","현재 목록을 불러오는 중…",true);
+  try{
+    const data=await callApi("listDebts",{});
+    debtData=Array.isArray(data?.rows)?data.rows:[];
+    renderDebts();
+    setResult("debtResult",`현재 ${groupedDebts(debtData).length}명의 업보를 불러왔어요.`,true);
+  }catch(error){
+    setResult("debtResult",error.message,false);
+    throw error;
+  }
+}
+function escapeHtml(value){
+  return String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[char]));
+}
+
+document.querySelectorAll(".tab").forEach(button=>{
+  button.addEventListener("click",()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+    button.classList.add("active");
+    $(button.dataset.panel).classList.add("active");
+  });
+});
+$("debtType").innerHTML=DEBT_TYPES.map(x=>`<option>${x}</option>`).join("");
+$("saveSettings").addEventListener("click",saveSettings);
+$("loadDebts").addEventListener("click",()=>loadDebts().catch(()=>{}));
+$("refreshDebtView").addEventListener("click",()=>loadDebts().catch(()=>{}));
+$("adminDebtSearch").addEventListener("input",renderDebts);
+
+bindForm("debtForm","updateDebt","debtResult",
+  data=>`${data.nickname}님의 ${data.debtType}을 ${data.newCount}개로 저장했어요.`,
+  ()=>loadDebts().catch(()=>{}));
+bindForm("honyoForm","saveHonyo","honyoResult","호뇽단 정보를 저장했어요.");
+bindForm("noticeForm","addNotice","noticeResult","공지를 추가했어요.",(_,form)=>form.reset());
+bindForm("scheduleForm","addSchedule","scheduleResult","스케줄을 추가했어요.",(_,form)=>form.reset());
+bindForm("gameForm","saveGame","gameResult","게임 정보를 저장했어요.");
+
+const savedApi=localStorage.getItem("honyong-admin-api")||"";
+const savedSecret=localStorage.getItem("honyong-admin-secret")||"";
+$("apiUrl").value=savedApi;
+$("adminSecret").value=savedSecret;
+if(savedApi&&savedSecret){
+  setStatus(false,"연결 확인 필요");
+}else{
+  setStatus(false,"연결 설정 필요");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#f58ab4" />
+  <meta name="description" content="한설 방송용 페이지 - 업보, 공지, 게임, 스케줄, 호뇽단" />
+  <title>한설 방송용 페이지</title>
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="networkBanner" class="network-banner" role="status" aria-live="polite" hidden>인터넷 연결이 끊겼어요. 저장된 화면을 보여드리고 있어요.</div>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <div class="bg-deco" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="#home">
+      <span class="brand-logo">ㅎ</span>
+      <span><b>한설 방송용 페이지</b><small>호뇨 방송정보센터</small></span>
+    </a>
+    <button id="menuButton" class="menu-button" aria-label="메뉴 열기">☰</button>
+    <nav id="mainNav">
+      <a href="#search">검색</a><a href="#debts">업보</a><a href="#notices">공지</a>
+      <a href="#games">게임</a><a href="#schedule">스케줄</a><a href="#honyo">호뇽단</a>
+    </nav>
+    <div class="top-actions">
+      <button id="shareSite" class="mini-button" type="button" aria-label="사이트 공유">공유</button>
+      <button id="themeToggle" class="mini-button icon-button" type="button" aria-label="다크모드 전환" title="다크모드 전환">🌙</button>
+      <button id="refreshData" class="mini-button" type="button">새로고침</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <span class="eyebrow">HANSOL BROADCAST HUB</span>
+        <h1>방송 정보를<br><em>한 번에 호뇨!</em></h1>
+        <p>업보 확인, 공지, 게임 목록, 방송 스케줄과 호뇽단 본진선언문을 한곳에서 확인해요.</p>
+        <div class="hero-actions"><a class="primary" href="#search">팬 검색하기</a><a class="secondary" href="#schedule">이번 일정 보기</a></div>
+      </div>
+      <aside class="hero-panel">
+        <span class="live-badge"><i></i> 방송 준비 중</span>
+        <div class="mascot">🌸</div>
+        <b id="heroScheduleTitle">다음 방송 확인 중…</b>
+        <p id="heroScheduleText">스케줄표를 불러오고 있어요.</p>
+      </aside>
+    </section>
+
+    <section class="section search-section" id="search">
+      <div class="section-head"><div><span class="eyebrow">FAN SEARCH</span><h2>통합 팬 검색</h2><p>닉네임 또는 아이디를 검색하면 업보와 호뇽단 정보를 함께 보여줘요.</p></div></div>
+      <div class="global-search"><input id="globalSearch" type="search" placeholder="닉네임 또는 아이디 입력" autocomplete="off" /><button id="globalSearchButton" type="button">검색</button></div>
+      <div id="searchResults" class="search-results"><div class="empty">검색어를 입력해 주세요. 카드를 열면 해당 팬의 전용 링크도 복사할 수 있어요.</div></div>
+    </section>
+
+    <section class="section tint" id="debts">
+      <div class="section-head"><div><span class="eyebrow">UPBO BOARD</span><h2>업보</h2><p>카드를 누르면 보유한 업보 종류와 개수가 보여요.</p></div><div class="stat">총 업보 <strong id="totalDebt">0</strong>개</div></div>
+      <div class="toolbar debt-toolbar">
+        <input id="debtSearch" type="search" placeholder="닉네임 또는 아이디 검색" />
+        <select id="debtTypeFilter"><option value="">모든 업보 종류</option></select>
+        <select id="debtSort">
+          <option value="name" selected>닉네임순</option>
+          <option value="count">업보 많은 순</option>
+          <option value="recent">최근 수정순</option>
+        </select>
+        <button id="debtViewToggle" class="view-toggle" type="button">목록 보기</button>
+      </div>
+      <div id="debtGrid" class="card-grid"></div>
+    </section>
+
+    <section class="section" id="notices">
+      <div class="section-head"><div><span class="eyebrow">NOTICE</span><h2>공지</h2><p>중요 공지는 위에 고정하고, 나머지는 순서대로 보여줘요.</p></div><div class="stat">공지 <strong id="noticeCount">0</strong>개</div></div>
+      <div id="noticeList" class="notice-list"></div>
+    </section>
+
+    <section class="section tint" id="games">
+      <div class="section-head">
+        <div><span class="eyebrow">GAME LIST</span><h2>게임</h2><p>검색하고, 상태별로 나눠 보고, 진행률까지 한눈에 확인해요.</p></div>
+        <div class="stat">전체 <strong id="gameTotalCount">0</strong>개</div>
+      </div>
+      <div class="game-toolbar">
+        <input id="gameSearch" type="search" placeholder="게임 제목 검색" autocomplete="off" />
+        <select id="gameSort">
+          <option value="order">등록 순서</option>
+          <option value="name">이름순</option>
+          <option value="progress">진행률 높은 순</option>
+        </select>
+      </div>
+      <div class="tabs game-tabs">
+        <button type="button" class="tab active" data-status="playing">하는 중 <b id="playingCount">0</b></button>
+        <button type="button" class="tab" data-status="planned">할 게임 <b id="plannedCount">0</b></button>
+        <button type="button" class="tab" data-status="done">했던 게임 <b id="doneCount">0</b></button>
+      </div>
+      <div id="gameGrid" class="game-grid"></div>
+    </section>
+
+    <section class="section" id="schedule">
+      <div class="section-head"><div><span class="eyebrow">SCHEDULE</span><h2>스케줄표</h2><p>오늘 일정은 강조하고, 예정된 일정부터 날짜순으로 보여줘요.</p></div><div class="stat">예정 <strong id="upcomingCount">0</strong>개</div></div>
+      <div class="schedule-toolbar">
+        <button id="upcomingOnly" class="schedule-filter active" type="button">예정 일정</button>
+        <button id="showAllSchedule" class="schedule-filter" type="button">지난 일정 포함</button>
+      </div>
+      <div id="scheduleList" class="schedule-list"></div>
+    </section>
+
+    <section class="section tint" id="honyo">
+      <div class="section-head"><div><span class="eyebrow">HONYODAN</span><h2>호뇽단</h2><p>본진선언문을 작성한 호뇽단 카드예요. 카드를 누르면 선언문 사진이 열려요.</p></div><div class="stat">호뇽단 <strong id="honyoCount">0</strong>명</div></div>
+      <div class="toolbar single"><input id="honyoSearch" type="search" placeholder="닉네임 또는 아이디 검색" /></div>
+      <div id="honyoGrid" class="card-grid"></div>
+    </section>
+  </main>
+
+  <button id="backToTop" class="back-to-top" type="button" aria-label="맨 위로 이동" title="맨 위로">↑</button>
+
+  <footer><b>한설 방송용 페이지</b><span>11.1단계 · <strong id="syncStatus" data-state="loading">연결 확인 중…</strong></span><small id="lastSync">아직 동기화되지 않았어요.</small></footer>
+
+  <dialog id="profileDialog"><button class="dialog-close" data-close="profileDialog">×</button><div id="profileDialogBody"></div></dialog>
+  <dialog id="statementDialog"><button class="dialog-close" data-close="statementDialog">×</button><div id="statementDialogBody"></div></dialog>
+
+  <script src="config.js"></script><script src="script.js"></script>
+  <script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('service-worker.js').catch(()=>{});</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "한설 방송용 페이지",
+  "short_name": "한설 방송",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff8fc",
+  "theme_color": "#f58ab4",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

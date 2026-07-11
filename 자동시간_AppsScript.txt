@@ -1,0 +1,15 @@
+function onEdit(e) {
+  const sheet = e.range.getSheet();
+  const name = sheet.getName();
+  if (e.range.getRow() === 1) return;
+
+  // 현재업보: D열(updatedAt)
+  if (name === '현재업보' && e.range.getColumn() !== 4) {
+    sheet.getRange(e.range.getRow(), 4).setValue(new Date());
+  }
+
+  // 호뇽단: C열(updatedAt)
+  if (name === '호뇽단' && e.range.getColumn() !== 3) {
+    sheet.getRange(e.range.getRow(), 3).setValue(new Date());
+  }
+}
