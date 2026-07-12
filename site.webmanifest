@@ -1,0 +1,17 @@
+{
+  "name": "호뇽 방송 관리 시스템",
+  "short_name": "호뇽 방송",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff9fc",
+  "theme_color": "#f77fae",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "description": "팬, 업보, 방송 기록을 관리하는 핑크·화이트 방송 운영 시스템"
+}

@@ -1,0 +1,18 @@
+호뇽 방송 관리 시스템 v1.0 설치 체크리스트
+
+[ ] ZIP 압축 해제
+[ ] GitHub 기존 파일 삭제
+[ ] v1.0 파일 전체 업로드
+[ ] Cloudflare 배포 완료
+[ ] XLSX를 Google 스프레드시트로 변환
+[ ] 구글시트 웹에 게시
+[ ] config.js spreadsheetId 입력
+[ ] Apps Script 코드 교체
+[ ] setAdminSecret 비밀번호 변경
+[ ] setAdminSecret 실행
+[ ] 웹 앱 새 배포
+[ ] admin.html 관리자 연결 성공
+[ ] setup.html 팬정보 연결 성공
+[ ] 공개 페이지 데이터 확인
+[ ] 본진선언문 사진 확인
+[ ] JSON 최초 백업

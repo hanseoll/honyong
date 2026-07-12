@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta name="theme-color" content="#f58ab4">
+<title>호뇽 방송 관리 시스템 · 관리자 v1.0</title>
+<style>
+:root{--bg:#fff8fc;--paper:#fff;--ink:#4c3b5f;--muted:#87778f;--line:#ead9e5;--pink:#f184b0;--pink2:#fce8f1;--purple:#8d6ccf;--lav:#f1ebff;--green:#3b9a67;--red:#c45570;font-family:Pretendard,"Noto Sans KR",system-ui,sans-serif}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:radial-gradient(circle at 12% 6%,rgba(241,132,176,.16),transparent 25%),radial-gradient(circle at 90% 10%,rgba(141,108,207,.14),transparent 27%),var(--bg)}button,input,select,textarea{font:inherit}.shell{width:min(1180px,calc(100% - 28px));margin:24px auto 70px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 20px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.92);box-shadow:0 12px 34px rgba(76,59,95,.08);backdrop-filter:blur(16px)}.brand b{display:block;font-size:19px}.brand small{color:var(--muted)}.status{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:800}.dot{width:10px;height:10px;border-radius:50%;background:#bbb}.dot.ok{background:var(--green)}.dot.bad{background:var(--red)}.notice{margin:16px 0;padding:13px 16px;border:1px solid #f2d7e4;border-radius:16px;background:#fff4f8;font-size:13px;line-height:1.6}.setup{margin:16px 0 20px;border:1px solid var(--line);border-radius:18px;background:var(--paper);overflow:hidden}.setup summary{cursor:pointer;padding:15px 18px;font-weight:900}.setup-body{padding:0 18px 18px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:grid;gap:7px}.field.full{grid-column:1/-1}label{font-size:13px;font-weight:900}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 12px;color:var(--ink);background:#fff;outline:none}textarea{min-height:100px;resize:vertical}input:focus,select:focus,textarea:focus{border-color:var(--pink);box-shadow:0 0 0 4px rgba(241,132,176,.11)}.dashboard{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.stat{padding:18px;border:1px solid var(--line);border-radius:18px;background:var(--paper);box-shadow:0 9px 25px rgba(76,59,95,.06)}.stat span{display:block;color:var(--muted);font-size:12px;font-weight:800}.stat b{display:block;margin-top:5px;font-size:28px}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.tab{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:white;color:var(--ink);font-weight:900;cursor:pointer}.tab.active{border-color:transparent;color:white;background:linear-gradient(135deg,var(--pink),var(--purple))}.panel{display:none;padding:22px;border:1px solid var(--line);border-radius:22px;background:var(--paper);box-shadow:0 12px 34px rgba(76,59,95,.07)}.panel.active{display:block}.panel h2{margin:0 0 7px}.desc{margin:0 0 18px;color:var(--muted);font-size:14px}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}.primary,.secondary,.danger,.quick{border:0;border-radius:13px;padding:11px 16px;font-weight:900;cursor:pointer}.primary{color:white;background:linear-gradient(135deg,var(--pink),var(--purple))}.secondary{color:var(--ink);background:var(--lav);border:1px solid var(--line)}.danger{color:white;background:var(--red)}button:disabled{opacity:.5;cursor:not-allowed}.quick-types{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}.quick{padding:9px 12px;background:var(--pink2);color:var(--ink);border:1px solid #f1cfdf}.quick.selected{color:white;background:linear-gradient(135deg,var(--pink),var(--purple));border-color:transparent}.result{margin-top:14px;min-height:44px;padding:12px 14px;border-radius:14px;background:#f7f4fa;color:var(--muted);font-size:13px;line-height:1.55}.result.ok{color:#24734b;background:#eaf8f0}.result.bad{color:#a13d55;background:#fff0f3}.debt-tools{display:grid;grid-template-columns:1fr auto;gap:10px;margin:18px 0 12px}.debt-list{display:grid;gap:10px;max-height:620px;overflow:auto}.person{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}.person-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}.total{color:var(--purple);font-size:13px;font-weight:900}.debt-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}.debt-row:first-of-type{border-top:0}.debt-name{font-weight:900}.step-buttons{display:flex;gap:6px}.step-buttons button{width:34px;height:32px;border:1px solid var(--line);border-radius:10px;background:white;font-weight:900;cursor:pointer}.step-buttons .minus{color:var(--red)}.step-buttons .plus{color:var(--green)}.recent{display:grid;gap:8px;margin-top:14px}.recent-item{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:#fff}.recent-item small{color:var(--muted)}.tiny{color:var(--muted);font-size:12px}.save-settings{margin-top:12px}iframe{display:none}@media(max-width:850px){.dashboard{grid-template-columns:repeat(2,1fr)}}@media(max-width:720px){.shell{width:min(100% - 18px,1180px);margin-top:10px}.topbar{align-items:flex-start;flex-direction:column}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.debt-tools{grid-template-columns:1fr}.panel{padding:17px}.dashboard{grid-template-columns:repeat(2,1fr)}.debt-row{grid-template-columns:1fr}}
+
+.roulette-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(330px,.75fr);gap:16px}
+.cart{display:grid;gap:8px;margin-top:12px}
+.cart-item{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.cart-item b{font-size:14px}.cart-step{display:flex;gap:5px}
+.cart-step button{width:31px;height:30px;border:1px solid var(--line);border-radius:9px;background:white;font-weight:900;cursor:pointer}
+.cart-count{min-width:34px;text-align:center;font-weight:900;color:var(--purple)}
+.cart-summary{display:flex;justify-content:space-between;gap:12px;margin-top:12px;padding:12px 14px;border-radius:13px;background:var(--lav);font-size:13px;font-weight:900}
+.paste-example{margin:8px 0;padding:10px 12px;border-radius:12px;background:#f7f4fa;color:var(--muted);font-size:12px;line-height:1.7}
+.preview{display:grid;gap:8px;margin-top:12px;max-height:330px;overflow:auto}
+.preview-person{padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:white}
+.preview-person b{display:block;margin-bottom:7px}.preview-chips{display:flex;flex-wrap:wrap;gap:6px}
+.preview-chip{padding:5px 9px;border-radius:999px;background:var(--pink2);font-size:12px;font-weight:900}
+.batch-history{display:grid;gap:8px;margin-top:12px}
+.batch-row{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:13px;background:white}
+.batch-row small{color:var(--muted)}
+@media(max-width:850px){.roulette-layout{grid-template-columns:1fr}}
+
+.profile-editor{display:grid;grid-template-columns:150px minmax(0,1fr);gap:18px;align-items:start}
+.admin-avatar-preview{
+  width:150px;height:150px;border-radius:35px;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#f184b0,#b99ceb);color:white;font-size:58px;font-weight:1000;
+  box-shadow:0 14px 34px rgba(141,108,207,.18)
+}
+.admin-avatar-preview img{width:100%;height:100%;object-fit:cover}
+@media(max-width:650px){.profile-editor{grid-template-columns:1fr}.admin-avatar-preview{width:112px;height:112px;border-radius:28px}}
+
+.admin-stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.admin-stats-grid article{padding:15px;border:1px solid var(--line);border-radius:16px;background:#fff}
+.admin-stats-grid span,.admin-stats-grid small{display:block;color:var(--muted);font-size:12px;font-weight:800}
+.admin-stats-grid b{display:block;margin:6px 0 2px;font-size:23px;overflow-wrap:anywhere}
+.admin-stats-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.admin-stats-box{padding:15px;border:1px solid var(--line);border-radius:16px;background:#fff}.admin-stats-box h3{margin:0 0 11px}
+.admin-rank-row{display:grid;grid-template-columns:27px 1fr auto;gap:8px;align-items:center;padding:7px 0;border-top:1px dashed var(--line)}
+.admin-rank-row:first-child{border-top:0}.admin-rank-no{color:var(--purple);font-weight:1000}.admin-rank-value{font-weight:1000}
+@media(max-width:850px){.admin-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:700px){.admin-stats-columns{grid-template-columns:1fr}}
+
+.broadcast-status-card{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(135deg,#fff5fa,#f6f2ff);margin-bottom:14px}
+.broadcast-status-label{display:block;color:var(--muted);font-size:12px;font-weight:900}.broadcast-status-card b{display:block;margin:4px 0;font-size:21px}.broadcast-status-card small{color:var(--muted)}
+.broadcast-live-badge{padding:8px 13px;border-radius:999px;background:#eee8f3;color:var(--muted);font-size:12px;font-weight:1000}.broadcast-live-badge.live{color:white;background:#e34f74;box-shadow:0 0 0 6px rgba(227,79,116,.10)}
+.broadcast-actions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.broadcast-action-box{padding:17px;border:1px solid var(--line);border-radius:17px;background:#fff}.broadcast-action-box h3{margin:0 0 7px}
+.report-summary-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin:15px 0}.report-summary-grid article{padding:14px;border:1px solid var(--line);border-radius:15px;background:#fff}.report-summary-grid span{display:block;color:var(--muted);font-size:11px;font-weight:900}.report-summary-grid b{display:block;margin-top:5px;font-size:21px}
+.report-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.report-box,.clip-box{padding:16px;border:1px solid var(--line);border-radius:17px;background:#fff}.report-box h3,.clip-box h3{margin:0 0 11px}
+.report-ranking{display:grid;gap:7px}.report-rank-row{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-top:1px dashed var(--line)}.report-rank-row:first-child{border-top:0}.report-rank-no{color:var(--purple);font-weight:1000}.report-rank-value{font-weight:1000}
+.clip-box{margin-top:13px}.clip-list{display:grid;gap:7px;margin-top:11px}.clip-row{display:grid;grid-template-columns:74px 75px 1fr;gap:9px;padding:9px 11px;border:1px solid var(--line);border-radius:12px;background:#fff}.clip-row b{color:var(--purple)}
+.report-history-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:18px 0 10px}.report-history-head h3{margin:0}.report-history{display:grid;gap:11px}
+.report-card{padding:16px;border:1px solid var(--line);border-radius:17px;background:#fff}.report-card-head{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px}.report-card-head b{font-size:16px}.report-card-head small{color:var(--muted)}
+.report-card-stats{display:flex;flex-wrap:wrap;gap:7px}.report-card-stats span{padding:6px 9px;border-radius:999px;background:var(--lav);font-size:11px;font-weight:900}.report-card p{margin:10px 0 0;color:var(--muted);font-size:13px;white-space:pre-wrap}
+@media(max-width:1000px){.report-summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.broadcast-actions-grid,.report-columns{grid-template-columns:1fr}.report-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.clip-row{grid-template-columns:65px 1fr}.clip-row span:last-child{grid-column:1/-1}}
+.archive-admin-actions{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}.archive-admin-actions input{width:auto;min-width:150px}.admin-report-calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:12px;padding:12px;border:1px solid var(--line);border-radius:16px;background:#fff}.admin-calendar-cell{min-height:55px;padding:6px;border-radius:10px;background:#f8f5fa;font-size:11px}.admin-calendar-cell.has-report{background:var(--pink2);color:var(--purple);font-weight:900}.admin-calendar-cell b{display:block}.admin-calendar-cell small{display:block;margin-top:7px}@media(max-width:700px){.archive-admin-actions{justify-content:stretch}.archive-admin-actions input,.archive-admin-actions button{width:100%}.admin-report-calendar{gap:3px}.admin-calendar-cell{min-height:44px;padding:4px}}
+.admin-season-head{display:flex;align-items:start;justify-content:space-between;gap:14px}
+.admin-season-head h2{margin:0}
+.admin-season-head select{min-width:145px;border:1px solid var(--line);border-radius:13px;padding:10px;background:#fff;color:var(--ink);font:inherit;font-weight:900}
+.admin-season-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px;margin:15px 0}
+.admin-season-kpis article{padding:13px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.admin-season-kpis span{display:block;color:var(--muted);font-size:10px;font-weight:900}
+.admin-season-kpis b{display:block;margin-top:5px;font-size:19px}
+.admin-season-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.restore-label{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
+@media(max-width:950px){.admin-season-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:700px){.admin-season-head{display:block}.admin-season-head select{width:100%;margin-bottom:10px}.admin-season-columns{grid-template-columns:1fr}.admin-season-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+:root{--bg:#fff8fb;--paper:#fff;--ink:#4b3140;--muted:#9b7c8e;--line:#f0dfe8;--pink:#f77fae;--pink2:#fff0f6;--purple:#d85b93;--lav:#fff4f8;--red:#d95f82}
+body{background:radial-gradient(circle at 8% 4%,rgba(247,127,174,.14),transparent 24%),radial-gradient(circle at 91% 8%,rgba(255,214,230,.22),transparent 28%),linear-gradient(180deg,#fff9fc,#fff)}
+.shell{width:min(1220px,calc(100% - 26px));margin:16px auto 70px}
+.topbar{position:sticky;top:10px;z-index:50;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.91);box-shadow:0 16px 42px rgba(208,91,143,.09);backdrop-filter:blur(18px)}
+.tabs{position:sticky;top:94px;z-index:40;padding:10px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.91);box-shadow:0 9px 26px rgba(208,91,143,.06);backdrop-filter:blur(16px)}
+.tab{border-color:var(--line);background:#fff;color:#714d60}.tab:hover{background:var(--pink2);border-color:#f4b8d1;color:#c44e82}.tab.active{color:#fff;background:linear-gradient(135deg,#ff99bf,#ea639d);box-shadow:0 9px 22px rgba(233,93,149,.20)}
+.panel{padding:24px;border-color:var(--line);border-radius:24px;background:rgba(255,255,255,.97);box-shadow:0 16px 42px rgba(208,91,143,.09)}
+input,select,textarea{border-color:var(--line);border-radius:14px;background:#fff;color:var(--ink)}input:focus,select:focus,textarea:focus{border-color:#f2a9c8;box-shadow:0 0 0 4px rgba(247,127,174,.10)}
+.primary{color:#fff;background:linear-gradient(135deg,#ff98bf,#e96099);box-shadow:0 9px 22px rgba(233,93,149,.18)}.secondary{color:#7b5368;background:#fff;border:1px solid var(--line)}.secondary:hover{background:var(--pink2);border-color:#f2b7cf}.danger{background:linear-gradient(135deg,#e97898,#d95379)}
+.result{background:#fff8fb;border:1px solid var(--line)}
+.person,.cart-item,.preview-person,.batch-row,.broadcast-action-box,.report-box,.clip-box,.report-card,.admin-stats-box,.admin-stats-grid article,.admin-season-kpis article,.dashboard-card{border-color:var(--line)!important;background:#fff!important;box-shadow:0 9px 26px rgba(208,91,143,.06)}
+.chip,.preview-chip,.report-card-stats span{color:#ad4d78;background:var(--pink2)}
+.quick{border-color:var(--line)!important;background:#fff!important;color:#754f63!important}.quick:hover,.quick.selected{border-color:#f1aac7!important;background:var(--pink2)!important;color:#c54f82!important}
+.admin-dashboard-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:15px;padding:20px;border:1px solid #f1ccdc;border-radius:20px;background:radial-gradient(circle at 85% 20%,rgba(247,127,174,.18),transparent 30%),linear-gradient(135deg,#fff,#fff3f8)}
+.admin-dashboard-hero h2{margin:4px 0 5px;font-size:25px}.admin-dashboard-hero p{margin:0;color:var(--muted)}.admin-eyebrow{display:inline-flex;padding:5px 9px;border-radius:999px;color:#c54f82;background:#ffeaf3;font-size:10px;font-weight:1000;letter-spacing:.08em}
+.admin-dashboard-live{display:flex;align-items:center;gap:8px;padding:10px 13px;border:1px solid var(--line);border-radius:999px;background:#fff}.dashboard-live-dot{width:10px;height:10px;border-radius:50%;background:#bbb}.dashboard-live-dot.live{background:#e84f77;box-shadow:0 0 0 6px rgba(232,79,119,.12)}
+.dashboard-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-bottom:13px}.dashboard-kpis article{min-height:118px;padding:15px;border:1px solid var(--line);border-radius:17px;background:#fff;box-shadow:0 9px 26px rgba(208,91,143,.06)}.dashboard-kpis span,.dashboard-kpis small{display:block;color:var(--muted);font-size:10px;font-weight:900}.dashboard-kpis b{display:block;margin:7px 0 3px;color:#d25489;font-size:clamp(22px,3vw,29px)}
+.dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.dashboard-card{padding:18px;border:1px solid var(--line);border-radius:19px}.dashboard-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.dashboard-card-head b{display:block;font-size:17px}.dashboard-card-head small{display:block;margin-top:3px;color:var(--muted);font-size:11px}
+.dashboard-quick-types{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0;max-height:180px;overflow:auto}.dashboard-quick-types button{border:1px solid var(--line);border-radius:999px;padding:8px 11px;background:#fff;color:#754f63;font-weight:900;cursor:pointer}.dashboard-quick-types button:hover{border-color:#f2acc8;background:var(--pink2);color:#c34e80}
+.dashboard-recent-list,.dashboard-rank-list,.dashboard-report-list{display:grid;gap:8px}.dashboard-recent-row,.dashboard-rank-row,.dashboard-report-row{display:grid;align-items:center;gap:8px;padding:9px 10px;border:1px solid var(--line);border-radius:13px;background:#fffafd;font-size:12px}.dashboard-recent-row{grid-template-columns:1fr auto}.dashboard-rank-row{grid-template-columns:28px 1fr auto}.dashboard-rank-no{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#ffeaf3;color:#c34e80;font-weight:1000}.dashboard-report-row{grid-template-columns:1fr auto}.dashboard-report-row small{display:block;color:var(--muted)}.dashboard-empty{padding:18px;border:1px dashed var(--line);border-radius:14px;color:var(--muted);text-align:center;font-size:12px}
+@media(max-width:1050px){.dashboard-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:780px){.topbar,.tabs{position:relative;top:auto}.tabs{overflow-x:auto;flex-wrap:nowrap}.tab{white-space:nowrap}.dashboard-grid{grid-template-columns:1fr}.admin-dashboard-hero{align-items:flex-start;flex-direction:column}}@media(max-width:560px){.panel{padding:16px}.dashboard-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.admin-diagnostics{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:14px 0;padding:13px 15px;border:1px solid var(--line);border-radius:16px;background:#fff7fa}
+.admin-diagnostics b,.admin-diagnostics span{display:block}.admin-diagnostics span{margin-top:3px;color:var(--muted);font-size:12px}.admin-diagnostics a{padding:8px 11px;border-radius:999px;background:#fff;color:#c04e80;text-decoration:none;font-size:12px;font-weight:900;border:1px solid var(--line)}
+@media(max-width:620px){.admin-diagnostics{align-items:flex-start;flex-direction:column}.admin-diagnostics a{width:100%;text-align:center}}
+</style></head><body><main class="shell">
+<header class="topbar"><div class="brand"><b>호뇽 방송 관리 시스템 · 관리자 v1.0</b><small>정식 운영 버전</small></div><div class="status"><span id="statusDot" class="dot"></span><span id="statusText">설정 확인 중</span></div></header>
+
+<div id="adminDiagnostics" class="admin-diagnostics">
+  <div><b>설치 상태 점검</b><span id="adminDiagnosticsText">연결 정보를 확인하는 중…</span></div>
+  <a href="setup.html">설정 도우미</a>
+</div>
+<div class="notice">공개 홈페이지에는 관리자 링크가 없습니다. 이 주소와 비밀번호를 방송 화면에 노출하지 마세요.</div>
+<details class="setup" open><summary>연결 설정</summary><div class="setup-body"><div class="grid"><div class="field full"><label>Apps Script 웹 앱 주소</label><input id="apiUrl" type="url" placeholder="https://script.google.com/macros/s/…/exec"></div><div class="field"><label>관리자 비밀번호</label><input id="adminSecret" type="password"></div><div class="field"><label>비밀번호 저장</label><select id="rememberSecret"><option value="yes">이 컴퓨터에 저장</option><option value="no">현재 창에서만</option></select></div></div><button id="saveSettings" class="secondary save-settings">설정 저장·연결 확인</button></div></details>
+<section class="dashboard"><div class="stat"><span>팬 수</span><b id="fanCount">0</b></div><div class="stat"><span>현재 업보</span><b id="debtCount">0</b></div><div class="stat"><span>호뇽단</span><b id="honyoCount">0</b></div><div class="stat"><span>공지</span><b id="noticeCount">0</b></div></section>
+<nav class="tabs"><button class="tab active" data-panel="dashboardPanel" type="button">대시보드</button><button class="tab" data-panel="broadcastPanel">방송 리포트</button><button class="tab" data-panel="statsPanel">통계</button><button class="tab" data-panel="roulettePanel">룰렛 일괄</button><button class="tab" data-panel="debtPanel">업보</button><button class="tab" data-panel="fanPanel">팬 등록</button><button class="tab" data-panel="honyoPanel">호뇽단</button><button class="tab" data-panel="noticePanel">공지</button><button class="tab" data-panel="schedulePanel">스케줄</button><button class="tab" data-panel="gamePanel">게임</button></nav>
+
+
+
+<section id="broadcastPanel" class="panel">
+  <h2>방송 리포트</h2>
+  <p class="desc">방송 시작 시 기준값을 저장하고, 종료할 때 업보 변화와 팬 활동을 자동으로 정리해요.</p>
+
+  <div class="broadcast-status-card">
+    <div>
+      <span class="broadcast-status-label">현재 상태</span>
+      <b id="broadcastStatusTitle">확인 중…</b>
+      <small id="broadcastStatusTime"></small>
+    </div>
+    <span id="broadcastLiveBadge" class="broadcast-live-badge">대기</span>
+  </div>
+
+  <div class="broadcast-actions-grid">
+    <article class="broadcast-action-box">
+      <h3>방송 시작</h3>
+      <p class="tiny">시작 시점의 팬 수, 호뇽단 수, 현재 업보 수를 기준값으로 저장합니다.</p>
+      <div class="field"><label for="broadcastTitle">방송 제목</label><input id="broadcastTitle" placeholder="예: 레드 데드 리뎀션 2 방송"></div>
+      <div class="field"><label for="broadcastStartMemo">시작 메모(선택)</label><input id="broadcastStartMemo" placeholder="오늘 목표나 특이사항"></div>
+      <div class="actions"><button id="startBroadcast" class="primary" type="button">방송 시작</button></div>
+    </article>
+
+    <article class="broadcast-action-box">
+      <h3>방송 종료</h3>
+      <p class="tiny">시작 이후의 업보 추가·완료 내역과 신규 팬·호뇽단을 자동 집계합니다.</p>
+      <div class="field"><label for="broadcastEndMemo">방송 메모</label><textarea id="broadcastEndMemo" placeholder="오늘 이슈, 썰, 편집자에게 전달할 내용"></textarea></div>
+      <div class="actions"><button id="endBroadcast" class="danger" type="button">방송 종료·리포트 생성</button></div>
+    </article>
+  </div>
+
+  <div id="broadcastResult" class="result">관리 API 연결 후 방송 상태를 불러옵니다.</div>
+
+  <div class="report-summary-grid">
+    <article><span>방송시간</span><b id="reportDuration">-</b></article>
+    <article><span>업보 추가</span><b id="reportAdded">0</b></article>
+    <article><span>업보 완료</span><b id="reportCompleted">0</b></article>
+    <article><span>현재 업보</span><b id="reportCurrent">0</b></article>
+    <article><span>신규 팬</span><b id="reportNewFans">0</b></article>
+    <article><span>신규 호뇽단</span><b id="reportNewHonyo">0</b></article>
+  </div>
+
+  <div class="report-columns">
+    <article class="report-box">
+      <h3>오늘의 팬 TOP 3</h3>
+      <div id="reportTopFans" class="report-ranking"></div>
+    </article>
+    <article class="report-box">
+      <h3>오늘의 업보 TOP 5</h3>
+      <div id="reportTopTypes" class="report-ranking"></div>
+    </article>
+  </div>
+
+  <div class="clip-box">
+    <h3>클립 메모</h3>
+    <p class="tiny">방송 중 타임코드와 메모를 저장하면 최근 방송 리포트에 연결돼요.</p>
+    <form id="clipForm">
+      <div class="grid">
+        <div class="field"><label for="clipTimecode">타임코드</label><input id="clipTimecode" name="timecode" placeholder="01:13:25" required></div>
+        <div class="field"><label for="clipCategory">분류</label><select id="clipCategory" name="category"><option>클립</option><option>애교</option><option>게임</option><option>썰</option><option>사고</option><option>기타</option></select></div>
+        <div class="field full"><label for="clipMemo">메모</label><input id="clipMemo" name="memo" placeholder="예: 애교하다가 웃음 터짐" required></div>
+      </div>
+      <div class="actions"><button class="primary" type="submit">클립 메모 저장</button></div>
+    </form>
+    <div id="clipResult" class="result">방송 시작 후 클립 메모를 저장할 수 있어요.</div>
+    <div id="clipList" class="clip-list"></div>
+  </div>
+
+  <div class="report-history-head"><h3>방송 리포트 아카이브</h3><div class="archive-admin-actions"><input id="reportSearch" type="search" placeholder="제목·메모 검색"><input id="reportMonthFilter" type="month"><button id="exportReportsJson" class="secondary" type="button">JSON 백업</button><label class="secondary restore-label">JSON 복원<input id="restoreReportsJson" type="file" accept="application/json,.json" hidden></label><button id="refreshReports" class="secondary" type="button">새로고침</button></div></div>
+  <div id="adminReportCalendar" class="admin-report-calendar"></div><div id="reportHistory" class="report-history"></div>
+</section>
+
+<section id="statsPanel" class="panel">
+  <div class="admin-season-head"><div><h2>운영 통계·시즌 분석</h2><p class="desc">방송 리포트를 시즌별로 분석하고 팬·업보 순위를 확인합니다.</p></div><select id="adminSeasonFilter"><option value="all">전체 기간</option></select></div><p class="desc">현재업보 시트에 남아 있는 수량을 기준으로 계산합니다.</p>
+  <div class="admin-stats-grid">
+    <article><span>업보 보유 팬</span><b id="adminStatsFans">0</b></article>
+    <article><span>업보 종류</span><b id="adminStatsTypes">0</b></article>
+    <article><span>1위 팬</span><b id="adminStatsTopFan">-</b><small id="adminStatsTopFanCount"></small></article>
+    <article><span>1위 업보</span><b id="adminStatsTopType">-</b><small id="adminStatsTopTypeCount"></small></article>
+  </div>
+  <div class="admin-stats-columns">
+    <article class="admin-stats-box"><h3>팬별 TOP 10</h3><div id="adminFanRanking"></div></article>
+    <article class="admin-stats-box"><h3>종류별 TOP 10</h3><div id="adminTypeRanking"></div></article>
+  </div>
+  <div class="admin-season-kpis">
+    <article><span>방송 횟수</span><b id="adminSeasonBroadcasts">0</b></article>
+    <article><span>총 방송시간</span><b id="adminSeasonHours">0시간</b></article>
+    <article><span>업보 추가</span><b id="adminSeasonAdded">0</b></article>
+    <article><span>업보 완료</span><b id="adminSeasonCompleted">0</b></article>
+    <article><span>신규 팬</span><b id="adminSeasonFans">0</b></article>
+    <article><span>신규 호뇽단</span><b id="adminSeasonHonyo">0</b></article>
+  </div>
+  <div class="admin-season-columns">
+    <article class="admin-stats-box"><h3>시즌 팬 TOP 10</h3><div id="adminSeasonFanRanks"></div></article>
+    <article class="admin-stats-box"><h3>시즌 업보 TOP 10</h3><div id="adminSeasonTypeRanks"></div></article>
+  </div>
+  <div class="actions"><button id="refreshAdminStats" class="secondary" type="button">통계 새로고침</button></div>
+</section>
+
+
+<section id="dashboardPanel" class="panel active">
+  <div class="admin-dashboard-hero">
+    <div><span class="admin-eyebrow">ADMIN HOME</span><h2>방송 운영 대시보드</h2><p>방송 상태와 업보 현황을 한 화면에서 확인해요.</p></div>
+    <div class="admin-dashboard-live"><span id="dashboardLiveDot" class="dashboard-live-dot"></span><b id="dashboardLiveText">상태 확인 중</b></div>
+  </div>
+  <div class="dashboard-kpis">
+    <article><span>현재 업보</span><b id="dashCurrentDebts">0</b><small>전체 남은 업보</small></article>
+    <article><span>최근 추가</span><b id="dashTodayAdded">0</b><small>최근 방송 기준</small></article>
+    <article><span>최근 완료</span><b id="dashTodayCompleted">0</b><small>최근 방송 기준</small></article>
+    <article><span>팬 수</span><b id="dashFans">0</b><small>팬정보 시트</small></article>
+    <article><span>호뇽단</span><b id="dashHonyo">0</b><small>본진선언 등록</small></article>
+    <article><span>최근 방송</span><b id="dashLatestBroadcast">-</b><small id="dashLatestBroadcastTitle">기록 없음</small></article>
+  </div>
+  <div class="dashboard-grid">
+    <article class="dashboard-card">
+      <div class="dashboard-card-head"><div><b>빠른 업보 추가</b><small>닉네임 선택 후 버튼 한 번</small></div></div>
+      <div class="field"><label for="dashboardNickname">닉네임</label><input id="dashboardNickname" list="nicknameList" placeholder="닉네임 입력"></div>
+      <div id="dashboardQuickTypes" class="dashboard-quick-types"></div>
+      <div id="dashboardQuickResult" class="result">추가할 팬을 선택하세요.</div>
+    </article>
+    <article class="dashboard-card">
+      <div class="dashboard-card-head"><div><b>최근 활동</b><small>업보 변경 기록</small></div><button id="dashboardRefresh" class="secondary" type="button">새로고침</button></div>
+      <div id="dashboardRecent" class="dashboard-recent-list"></div>
+    </article>
+  </div>
+  <div class="dashboard-grid">
+    <article class="dashboard-card"><div class="dashboard-card-head"><div><b>현재 업보 TOP 5</b><small>팬별 보유 개수</small></div></div><div id="dashboardTopFans" class="dashboard-rank-list"></div></article>
+    <article class="dashboard-card"><div class="dashboard-card-head"><div><b>최근 방송 리포트</b><small>가장 최근 3개</small></div></div><div id="dashboardReports" class="dashboard-report-list"></div></article>
+  </div>
+</section>
+<section id="roulettePanel" class="panel">
+  <h2>룰렛 결과 일괄 등록</h2>
+  <p class="desc">버튼으로 모아 등록하거나, 방송 정리문을 여러 줄 붙여넣어 한 번에 저장할 수 있어요.</p>
+  <div class="roulette-layout">
+    <div>
+      <h3>버튼으로 담기</h3>
+      <div class="grid">
+        <div class="field full">
+          <label>닉네임</label>
+          <input id="rouletteNickname" list="nicknameList" placeholder="닉네임 선택 또는 입력" autocomplete="off">
+        </div>
+      </div>
+      <div id="rouletteQuickTypes" class="quick-types"></div>
+      <div id="rouletteCart" class="cart"></div>
+      <div class="cart-summary"><span>종류 <b id="cartTypeCount">0</b>개</span><span>총 업보 <b id="cartTotalCount">0</b>개</span></div>
+      <div class="actions">
+        <button id="saveRouletteCart" class="primary" type="button">장바구니 전체 등록</button>
+        <button id="clearRouletteCart" class="secondary" type="button">비우기</button>
+      </div>
+    </div>
+    <div>
+      <h3>텍스트 붙여넣기</h3>
+      <div class="paste-example">
+        가자 / 매도1, 원하는 대사1, 애교2<br>
+        러브 / 시참권(3판)1<br>
+        야드 / 시참권(3판) 3
+      </div>
+      <textarea id="roulettePaste" placeholder="닉네임 / 업보1, 업보2 형식으로 여러 줄 붙여넣기"></textarea>
+      <div class="actions">
+        <button id="previewRoulettePaste" class="secondary" type="button">내용 확인</button>
+        <button id="saveRoulettePaste" class="primary" type="button">붙여넣기 전체 등록</button>
+      </div>
+      <div id="roulettePreview" class="preview"></div>
+    </div>
+  </div>
+  <div id="rouletteResult" class="result">등록할 결과를 담거나 붙여넣어 주세요.</div>
+  <div class="actions">
+    <button id="undoLastBatch" class="danger" type="button">마지막 룰렛 묶음 전체 취소</button>
+    <button id="refreshRouletteData" class="secondary" type="button">팬 목록 새로고침</button>
+  </div>
+  <h3>최근 일괄 등록</h3>
+  <div id="batchHistory" class="batch-history"></div>
+</section>
+<section id="debtPanel" class="panel"><h2>업보 빠른 관리</h2><p class="desc">닉네임 선택 → 업보 버튼 → 저장. 아래 목록에서는 +1/-1을 바로 누를 수 있어요.</p><form id="debtForm"><div class="grid"><div class="field"><label>닉네임</label><input id="debtNickname" name="nickname" required list="nicknameList" autocomplete="off"></div><div class="field"><label>수량</label><input id="debtAmount" name="amount" type="number" min="1" value="1" required></div><div class="field"><label>처리 방식</label><select id="debtMode" name="mode"><option value="add">추가 (+)</option><option value="subtract">수행 차감 (-)</option><option value="set">남은 수량 직접 설정</option></select></div><div class="field"><label>선택된 업보</label><input id="debtTypeDisplay" readonly placeholder="아래 버튼에서 선택"></div></div><input id="debtType" name="debtType" type="hidden"><div id="quickTypes" class="quick-types"></div><div class="actions"><button class="primary" type="submit">업보 저장</button><button id="loadDashboard" class="secondary" type="button">전체 새로고침</button><button id="undoLast" class="danger" type="button">마지막 업보 작업 취소</button></div></form><div id="debtResult" class="result">연결 후 사용할 수 있어요.</div><div class="debt-tools"><input id="adminDebtSearch" type="search" placeholder="닉네임 검색"><button id="refreshDebtView" class="secondary">목록 불러오기</button></div><div id="adminDebtList" class="debt-list"></div><h3>최근 업보 작업</h3><div id="recentActions" class="recent"></div></section>
+<section id="fanPanel" class="panel">
+  <h2>팬 프로필 등록·수정</h2>
+  <p class="desc">사진을 비워두면 닉네임 첫 글자와 대표색으로 자동 아바타가 만들어져요.</p>
+  <div class="profile-editor">
+    <div id="fanAvatarPreview" class="admin-avatar-preview"><span>?</span></div>
+    <form id="fanForm">
+      <div class="grid">
+        <div class="field"><label>닉네임</label><input id="fanNickname" name="nickname" required list="nicknameList"></div>
+        <div class="field"><label>SOOP 아이디</label><input id="fanId" name="fanId"></div>
+        <div class="field full"><label>프로필 사진 URL(선택)</label><input id="fanAvatar" name="avatar" type="url" placeholder="비워두면 자동 아바타"></div>
+        <div class="field"><label>대표색</label><input id="fanColor" name="color" type="color" value="#f184b0"></div>
+        <div class="field"><label>사진 처리</label><select id="fanAvatarMode" name="avatarMode"><option value="keep">입력한 주소로 저장</option><option value="clear">기존 사진 지우고 자동 아바타 사용</option></select></div>
+      </div>
+      <div class="actions"><button class="primary">팬 저장</button><button id="loadFanProfile" class="secondary" type="button">기존 팬 불러오기</button></div>
+    </form>
+  </div>
+  <div id="fanResult" class="result">닉네임 기준으로 추가 또는 수정합니다.</div>
+</section>
+<section id="honyoPanel" class="panel"><h2>호뇽단 등록</h2><form id="honyoForm"><div class="grid"><div class="field"><label>닉네임</label><input name="nickname" required list="nicknameList"></div><div class="field"><label>아이디(선택)</label><input name="fanId"></div><div class="field full"><label>본진선언문 사진 URL</label><input name="statementImage" type="url" required></div><div class="field full"><label>메모</label><input name="memo"></div></div><div class="actions"><button class="primary">호뇽단 저장</button></div></form><div id="honyoResult" class="result"></div></section>
+<section id="noticePanel" class="panel"><h2>공지 추가</h2><form id="noticeForm"><div class="grid"><div class="field"><label>분류</label><select name="category"><option>공지</option><option>이벤트</option><option>업데이트</option></select></div><div class="field"><label>상단 고정</label><select name="pinned"><option value="">안 함</option><option value="고정">고정</option></select></div><div class="field full"><label>제목</label><input name="title" required></div><div class="field full"><label>내용</label><textarea name="content" required></textarea></div></div><div class="actions"><button class="primary">공지 추가</button></div></form><div id="noticeResult" class="result"></div></section>
+<section id="schedulePanel" class="panel"><h2>스케줄 추가</h2><form id="scheduleForm"><div class="grid"><div class="field"><label>날짜</label><input name="date" type="date" required></div><div class="field"><label>시간</label><input name="time" placeholder="20:00 또는 휴방" required></div><div class="field"><label>종류</label><select name="type"><option>방송</option><option>휴방</option><option>이벤트</option><option>기타</option></select></div><div class="field"><label>제목</label><input name="title" required></div><div class="field full"><label>메모</label><input name="memo"></div></div><div class="actions"><button class="primary">스케줄 추가</button></div></form><div id="scheduleResult" class="result"></div></section>
+<section id="gamePanel" class="panel"><h2>게임 추가·수정</h2><form id="gameForm"><div class="grid"><div class="field"><label>게임 제목</label><input name="title" required></div><div class="field"><label>상태</label><select name="status"><option>하는 중</option><option>할 게임</option><option>했던 게임</option></select></div><div class="field"><label>진행도 문구</label><input name="progress"></div><div class="field"><label>진행률</label><input name="progressPercent" type="number" min="0" max="100" value="0"></div><div class="field full"><label>이미지 URL</label><input name="image" type="url"></div><div class="field full"><label>메모</label><input name="memo"></div></div><div class="actions"><button class="primary">게임 저장</button></div></form><div id="gameResult" class="result"></div></section>
+<datalist id="nicknameList"></datalist><iframe id="apiFrame" name="apiFrame"></iframe><form id="apiForm" method="post" target="apiFrame"></form></main>
+<script>
+const DEBT_TYPES=["똥글","매도","노래","원하는 대사","애교","포스트잇","단컷 방셀","즉석 방셀","일반프사","하단배너","플로팅배너","시참권(3판)","AI 그림","B컷 방셀","한정 단컷","네컷 방셀","정성 방셀","움짤 방셀","영상 방셀","상단배너","원하는 방셀"];
+const $=id=>document.getElementById(id);let sessionSecret='',debtData=[],recentData=[],batchHistoryData=[],rouletteCart=new Map(),broadcastState=null,reportData=[],clipData=[],pending=new Map();
+
+function updateAdminDiagnostics(){
+  const api=localStorage.getItem('honyong-admin-api')||'';
+  const secret=localStorage.getItem('honyong-admin-secret')||'';
+  const parts=[];
+  parts.push(api?'Apps Script 주소 저장됨':'Apps Script 주소 없음');
+  parts.push(secret?'비밀번호 저장됨':'비밀번호 없음');
+  $('adminDiagnosticsText').textContent=parts.join(' · ');
+}
+
+function getSettings(){return{apiUrl:localStorage.getItem('honyong-admin-api')||'',secret:sessionSecret||localStorage.getItem('honyong-admin-secret')||''}}
+function setStatus(ok,text){$('statusDot').className='dot '+(ok?'ok':'bad');$('statusText').textContent=text}
+function setResult(id,msg,ok=true){const b=$(id);b.textContent=msg;b.className='result '+(ok?'ok':'bad')}
+function saveSettings(){const u=$('apiUrl').value.trim(),s=$('adminSecret').value;localStorage.setItem('honyong-admin-api',u);if($('rememberSecret').value==='yes'){localStorage.setItem('honyong-admin-secret',s);sessionSecret=''}else{localStorage.removeItem('honyong-admin-secret');sessionSecret=s}if(!u||!s){setStatus(false,'주소와 비밀번호 필요');return}setStatus(false,'연결 확인 중');callApi('ping',{}).then(()=>{setStatus(true,'관리 API 연결됨');loadDashboard()}).catch(e=>setStatus(false,e.message))}
+function callApi(action,data){const{apiUrl,secret}=getSettings();if(!apiUrl)return Promise.reject(new Error('Apps Script 주소를 입력하세요.'));if(!secret)return Promise.reject(new Error('비밀번호를 입력하세요.'));const requestId=crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();return new Promise((resolve,reject)=>{const timer=setTimeout(()=>{pending.delete(requestId);reject(new Error('응답 시간 초과'))},20000);pending.set(requestId,{resolve,reject,timer});const f=$('apiForm');f.action=apiUrl;f.innerHTML='';Object.entries({action,secret,requestId,...data}).forEach(([k,v])=>{const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v??'';f.appendChild(i)});f.submit()})}
+window.addEventListener('message',e=>{const m=e.data;if(!m||m.source!=='honyong-admin'||!m.requestId)return;const t=pending.get(m.requestId);if(!t)return;clearTimeout(t.timer);pending.delete(m.requestId);m.ok?t.resolve(m.data):t.reject(new Error(m.error||'처리 실패'))});
+function ser(form){return Object.fromEntries(new FormData(form).entries())}function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function bind(formId,action,resultId,success,after){$(formId).addEventListener('submit',async e=>{e.preventDefault();const b=e.submitter;if(b)b.disabled=true;setResult(resultId,'저장 중…');try{const d=await callApi(action,ser(e.currentTarget));setResult(resultId,typeof success==='function'?success(d):success,true);if(after)after(d,e.currentTarget)}catch(err){setResult(resultId,err.message,false)}finally{if(b)b.disabled=false}})}
+function grouped(rows){const m=new Map();rows.forEach(r=>{if(!m.has(r.nickname))m.set(r.nickname,{nickname:r.nickname,total:0,items:[]});const p=m.get(r.nickname);p.total+=Number(r.count)||0;p.items.push(r)});return[...m.values()].sort((a,b)=>a.nickname.localeCompare(b.nickname,'ko'))}
+function renderDebts(){const q=$('adminDebtSearch').value.trim().toLowerCase();const people=grouped(debtData).filter(p=>!q||p.nickname.toLowerCase().includes(q));$('adminDebtList').innerHTML=people.length?people.map(p=>`<article class="person"><div class="person-head"><b>${esc(p.nickname)}</b><span class="total">총 ${p.total}개</span></div>${p.items.sort((a,b)=>a.type.localeCompare(b.type,'ko')).map(i=>`<div class="debt-row"><div><span class="debt-name">${esc(i.type)}</span> ×${i.count}</div><div class="step-buttons"><button class="minus" data-nick="${esc(p.nickname)}" data-type="${esc(i.type)}" data-delta="-1">−</button><button class="plus" data-nick="${esc(p.nickname)}" data-type="${esc(i.type)}" data-delta="1">＋</button></div></div>`).join('')}</article>`).join(''):'<div class="result">업보가 없어요.</div>';$('nicknameList').innerHTML=(window.fans||[]).map(x=>`<option value="${esc(x.nickname)}"></option>`).join('');document.querySelectorAll('[data-delta]').forEach(b=>b.onclick=()=>quickDelta(b))}
+async function quickDelta(b){b.disabled=true;try{await callApi('updateDebt',{nickname:b.dataset.nick,debtType:b.dataset.type,amount:1,mode:Number(b.dataset.delta)>0?'add':'subtract'});await loadDashboard()}catch(e){setResult('debtResult',e.message,false)}finally{b.disabled=false}}
+function renderRecent(){const rows=recentData||[];$('recentActions').innerHTML=rows.length?rows.map(r=>`<div class="recent-item"><span><b>${esc(r.nickname)}</b> · ${esc(r.debtType)} ${r.beforeCount}→${r.afterCount}</span><small>${esc(r.time||'')}</small></div>`).join(''):'<div class="tiny">최근 작업이 없어요.</div>'}
+
+
+let adminActiveSeason='all';
+function adminReportSeasonKey(report){
+  const [year,month]=String(report.date||'').split('-').map(Number);
+  return year&&month?`${year}-${month<=6?'H1':'H2'}`:'';
+}
+function adminSeasonLabel(key){
+  if(key==='all')return '전체 기간';
+  const m=key.match(/^(\d{4})-(H1|H2)$/);
+  return m?`${m[1]}년 ${m[2]==='H1'?'상반기':'하반기'}`:key;
+}
+function adminSeasonReports(){
+  return reportData.filter(r=>adminActiveSeason==='all'||adminReportSeasonKey(r)===adminActiveSeason);
+}
+function adminAggregate(rows,key){
+  const map=new Map();
+  rows.forEach(r=>(r[key]||[]).forEach(x=>map.set(x.name,(map.get(x.name)||0)+(Number(x.count)||0))));
+  return [...map.entries()].map(([name,count])=>({name,count})).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko'));
+}
+function populateAdminSeasons(){
+  const keys=[...new Set(reportData.map(adminReportSeasonKey).filter(Boolean))].sort().reverse(),select=$('adminSeasonFilter');
+  select.innerHTML='<option value="all">전체 기간</option>'+keys.map(k=>`<option value="${k}">${adminSeasonLabel(k)}</option>`).join('');
+  if(adminActiveSeason==='all'||keys.includes(adminActiveSeason))select.value=adminActiveSeason;
+}
+function renderAdminSeasonAnalytics(){
+  populateAdminSeasons();
+  const reports=adminSeasonReports(),fans=adminAggregate(reports,'topFans'),types=adminAggregate(reports,'topTypes');
+  const minutes=reports.reduce((s,r)=>s+(Number(r.durationMinutes)||0),0);
+  $('adminSeasonBroadcasts').textContent=reports.length;
+  $('adminSeasonHours').textContent=minutes>=60?`${Math.floor(minutes/60)}시간 ${minutes%60}분`:`${minutes}분`;
+  $('adminSeasonAdded').textContent=reports.reduce((s,r)=>s+(Number(r.added)||0),0);
+  $('adminSeasonCompleted').textContent=reports.reduce((s,r)=>s+(Number(r.completed)||0),0);
+  $('adminSeasonFans').textContent=reports.reduce((s,r)=>s+(Number(r.newFans)||0),0);
+  $('adminSeasonHonyo').textContent=reports.reduce((s,r)=>s+(Number(r.newHonyo)||0),0);
+  $('adminSeasonFanRanks').innerHTML=adminRankingHtml(fans);
+  $('adminSeasonTypeRanks').innerHTML=adminRankingHtml(types);
+}
+
+
+function dashboardFanTotals(){const map=new Map();debtData.forEach(r=>{const c=Number(r.count)||0;if(c>0)map.set(r.nickname,(map.get(r.nickname)||0)+c)});return[...map.entries()].map(([name,count])=>({name,count})).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko'))}
+function renderDashboard(){
+  const latest=reportData?.[0]||null,active=Boolean(broadcastState?.active),current=debtData.reduce((s,r)=>s+(Number(r.count)||0),0);
+  $('dashboardLiveText').textContent=active?'방송 진행 중':'방송 대기';$('dashboardLiveDot').classList.toggle('live',active);
+  $('dashCurrentDebts').textContent=current;$('dashTodayAdded').textContent=latest?.added||0;$('dashTodayCompleted').textContent=latest?.completed||0;$('dashFans').textContent=(window.fans||[]).length;$('dashHonyo').textContent=Number($('statHonyo')?.textContent||0);$('dashLatestBroadcast').textContent=latest?.date||'-';$('dashLatestBroadcastTitle').textContent=latest?.title||'기록 없음';
+  const ranks=dashboardFanTotals().slice(0,5);$('dashboardTopFans').innerHTML=ranks.length?ranks.map((r,i)=>`<div class="dashboard-rank-row"><span class="dashboard-rank-no">${i+1}</span><b>${esc(r.name)}</b><span>${r.count}개</span></div>`).join(''):'<div class="dashboard-empty">현재 업보가 없어요.</div>';
+  $('dashboardRecent').innerHTML=(recentData||[]).slice(0,8).length?recentData.slice(0,8).map(r=>`<div class="dashboard-recent-row"><span><b>${esc(r.nickname)}</b> · ${esc(r.type)}</span><span>${r.before} → ${r.after}</span></div>`).join(''):'<div class="dashboard-empty">최근 업보 기록이 없어요.</div>';
+  $('dashboardReports').innerHTML=(reportData||[]).slice(0,3).length?reportData.slice(0,3).map(r=>`<div class="dashboard-report-row"><span><b>${esc(r.title||'방송')}</b><small>${esc(r.date||'')} · 업보 +${Number(r.added)||0}</small></span><span>${durationText(r.durationMinutes)}</span></div>`).join(''):'<div class="dashboard-empty">저장된 방송 리포트가 없어요.</div>';
+}
+async function dashboardQuickAdd(type){const nickname=$('dashboardNickname').value.trim();if(!nickname){setResult('dashboardQuickResult','닉네임을 먼저 입력하세요.',false);$('dashboardNickname').focus();return}try{const r=await callApi('updateDebt',{nickname,debtType:type,amount:1,mode:'add'});setResult('dashboardQuickResult',`${nickname}님의 ${type}을 ${r.newCount}개로 저장했어요.`,true);await loadDashboard()}catch(e){setResult('dashboardQuickResult',e.message,false)}}
+function setupDashboardQuickTypes(){const box=$('dashboardQuickTypes');if(!box||box.children.length)return;DEBT_TYPES.forEach(type=>{const b=document.createElement('button');b.type='button';b.textContent=type;b.onclick=()=>dashboardQuickAdd(type);box.appendChild(b)})}
+
+function adminDebtStats(){
+  const fanMap=new Map(),typeMap=new Map();
+  debtData.forEach(row=>{const count=Number(row.count)||0;if(count<=0)return;fanMap.set(row.nickname,(fanMap.get(row.nickname)||0)+count);typeMap.set(row.type,(typeMap.get(row.type)||0)+count)});
+  return{fans:[...fanMap.entries()].map(([name,count])=>({name,count})).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko')),types:[...typeMap.entries()].map(([name,count])=>({name,count})).sort((a,b)=>b.count-a.count||a.name.localeCompare(b.name,'ko'))};
+}
+function adminRankingHtml(rows){return rows.length?rows.slice(0,10).map((r,i)=>`<div class="admin-rank-row"><span class="admin-rank-no">${i+1}</span><span>${esc(r.name)}</span><span class="admin-rank-value">${r.count}개</span></div>`).join(''):'<div class="tiny">표시할 업보가 없어요.</div>'}
+function renderAdminStats(){
+  const s=adminDebtStats(),f=s.fans[0],t=s.types[0];
+  $('adminStatsFans').textContent=s.fans.length;$('adminStatsTypes').textContent=s.types.length;
+  $('adminStatsTopFan').textContent=f?.name||'-';$('adminStatsTopFanCount').textContent=f?`${f.count}개 보유`:'';
+  $('adminStatsTopType').textContent=t?.name||'-';$('adminStatsTopTypeCount').textContent=t?`총 ${t.count}개`:'';
+  $('adminFanRanking').innerHTML=adminRankingHtml(s.fans);$('adminTypeRanking').innerHTML=adminRankingHtml(s.types);
+}
+
+
+function durationText(minutes){
+  const value=Math.max(0,Number(minutes)||0);
+  const h=Math.floor(value/60),m=value%60;
+  return h?`${h}시간 ${m}분`:`${m}분`;
+}
+function reportRankHtml(rows,nameKey='name',limit=5){
+  const list=(rows||[]).slice(0,limit);
+  return list.length?list.map((row,index)=>`<div class="report-rank-row"><span class="report-rank-no">${index+1}</span><span>${esc(row[nameKey]||'-')}</span><span class="report-rank-value">${Number(row.count)||0}개</span></div>`).join(''):'<div class="tiny">기록이 없어요.</div>';
+}
+function renderBroadcastState(){
+  const active=Boolean(broadcastState?.active);
+  $('broadcastStatusTitle').textContent=active?(broadcastState.title||'방송 진행 중'):'진행 중인 방송 없음';
+  $('broadcastStatusTime').textContent=active?`${broadcastState.startedAt||''} 시작`:'방송 시작 버튼을 누르면 집계를 시작해요.';
+  $('broadcastLiveBadge').textContent=active?'LIVE':'대기';
+  $('broadcastLiveBadge').classList.toggle('live',active);
+  $('startBroadcast').disabled=active;
+  $('endBroadcast').disabled=!active;
+}
+function renderLatestReport(report){
+  const r=report||{};
+  $('reportDuration').textContent=r.durationMinutes!=null?durationText(r.durationMinutes):'-';
+  $('reportAdded').textContent=Number(r.added)||0;
+  $('reportCompleted').textContent=Number(r.completed)||0;
+  $('reportCurrent').textContent=Number(r.currentDebts)||0;
+  $('reportNewFans').textContent=Number(r.newFans)||0;
+  $('reportNewHonyo').textContent=Number(r.newHonyo)||0;
+  $('reportTopFans').innerHTML=reportRankHtml(r.topFans||[],'name',3);
+  $('reportTopTypes').innerHTML=reportRankHtml(r.topTypes||[],'name',5);
+}
+function filteredReports(){const q=$('reportSearch').value.trim().toLowerCase(),month=$('reportMonthFilter').value;return reportData.filter(r=>(!month||r.date.startsWith(month))&&(!q||`${r.title} ${r.memo||''}`.toLowerCase().includes(q)))}
+function renderAdminReportCalendar(rows){const month=$('reportMonthFilter').value||new Date().toISOString().slice(0,7),[y,m]=month.split('-').map(Number),first=new Date(y,m-1,1),start=new Date(y,m-1,1-first.getDay()),cells=[];for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const key=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,count=rows.filter(r=>r.date===key).length;cells.push(`<div class="admin-calendar-cell${count?' has-report':''}"><b>${d.getDate()}</b>${count?`<small>${count}회</small>`:''}</div>`)}$('adminReportCalendar').innerHTML=cells.join('')}
+function renderReports(){const rows=filteredReports();renderAdminReportCalendar(rows);$('reportHistory').innerHTML=rows.length?rows.map(r=>`<article class="report-card"><div class="report-card-head"><div><b>${esc(r.title||'방송')}</b><small>${esc(r.date||'')} · ${durationText(r.durationMinutes)}</small></div><small>${esc(r.startedAt||'')} ~ ${esc(r.endedAt||'')}</small></div><div class="report-card-stats"><span>업보 +${Number(r.added)||0}</span><span>완료 ${Number(r.completed)||0}</span><span>신규 팬 ${Number(r.newFans)||0}</span><span>호뇽단 +${Number(r.newHonyo)||0}</span><span>현재 ${Number(r.currentDebts)||0}</span></div>${r.memo?`<p>${esc(r.memo)}</p>`:''}</article>`).join(''):'<div class="result">조건에 맞는 방송 리포트가 없어요.</div>'}
+function renderClips(){
+  $('clipList').innerHTML=clipData.length?clipData.map(c=>`<div class="clip-row"><b>${esc(c.timecode)}</b><span>${esc(c.category)}</span><span>${esc(c.memo)}</span></div>`).join(''):'<div class="tiny">저장된 클립 메모가 없어요.</div>';
+}
+async function loadBroadcastData(){
+  try{
+    const d=await callApi('broadcastDashboard',{});
+    broadcastState=d.active||null;
+    reportData=d.reports||[];
+    clipData=d.clips||[];
+    renderBroadcastState();renderReports();renderClips();renderLatestReport(reportData[0]);renderAdminSeasonAnalytics();renderDashboard();
+  }catch(error){
+    setResult('broadcastResult',error.message,false);
+  }
+}
+
+async function loadDashboard(){setResult('debtResult','불러오는 중…');try{const d=await callApi('dashboard',{});window.fans=d.fans||[];debtData=d.debts||[];recentData=d.recent||[];batchHistoryData=d.batches||[];$('fanCount').textContent=d.stats.fans;$('debtCount').textContent=d.stats.debts;$('honyoCount').textContent=d.stats.honyo;$('noticeCount').textContent=d.stats.notices;renderDebts();renderRecent();renderBatchHistory();renderAdminStats();renderDashboard();setResult('debtResult','최신 데이터를 불러왔어요.',true);loadBroadcastData()}catch(e){setResult('debtResult',e.message,false);throw e}}
+
+function rouletteKey(nickname,type){return `${nickname}|||${type}`}
+function addToRouletteCart(type,amount=1){
+  const nickname=$('rouletteNickname').value.trim();
+  if(!nickname){setResult('rouletteResult','닉네임을 먼저 입력하세요.',false);$('rouletteNickname').focus();return}
+  const key=rouletteKey(nickname,type);
+  const current=rouletteCart.get(key)||{nickname,type,count:0};
+  current.count=Math.max(0,current.count+amount);
+  if(current.count<=0)rouletteCart.delete(key);else rouletteCart.set(key,current);
+  renderRouletteCart();
+}
+function renderRouletteCart(){
+  const rows=[...rouletteCart.values()].sort((a,b)=>a.nickname.localeCompare(b.nickname,'ko')||a.type.localeCompare(b.type,'ko'));
+  $('rouletteCart').innerHTML=rows.length?rows.map((r,i)=>`<div class="cart-item"><div><b>${esc(r.nickname)}</b><br><span class="tiny">${esc(r.type)}</span></div><div class="cart-step"><button type="button" data-cart-index="${i}" data-cart-delta="-1">−</button><span class="cart-count">${r.count}</span><button type="button" data-cart-index="${i}" data-cart-delta="1">＋</button></div><button type="button" class="danger" data-cart-remove="${i}">삭제</button></div>`).join(''):'<div class="tiny">아직 담긴 룰렛 결과가 없어요.</div>';
+  $('cartTypeCount').textContent=rows.length;
+  $('cartTotalCount').textContent=rows.reduce((sum,r)=>sum+r.count,0);
+  document.querySelectorAll('[data-cart-delta]').forEach(button=>button.onclick=()=>{
+    const row=rows[Number(button.dataset.cartIndex)];
+    addToRouletteCart(row.type,Number(button.dataset.cartDelta));
+  });
+  document.querySelectorAll('[data-cart-remove]').forEach(button=>{button.onclick=()=>{
+    const row=rows[Number(button.dataset.cartRemove)];
+    rouletteCart.delete(rouletteKey(row.nickname,row.type));renderRouletteCart();
+  }});
+}
+function normalizeDebtText(value){return String(value||'').replace(/\s+/g,' ').trim()}
+function parseDebtItem(text){
+  const clean=normalizeDebtText(text);
+  const types=[...DEBT_TYPES].sort((a,b)=>b.length-a.length);
+  for(const type of types){
+    if(clean.startsWith(type)){
+      const rest=clean.slice(type.length).trim().replace(/^x/i,'').replace(/^×/,'');
+      const match=rest.match(/^(\d+)$/);
+      return {type,count:match?Number(match[1]):1};
+    }
+  }
+  const fallback=clean.match(/^(.*?)(\d+)$/);
+  if(fallback)return{type:normalizeDebtText(fallback[1]),count:Number(fallback[2])};
+  return clean?{type:clean,count:1}:null;
+}
+function parseRoulettePaste(){
+  const lines=$('roulettePaste').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+  const merged=new Map(),errors=[];
+  lines.forEach((line,lineIndex)=>{
+    const parts=line.split(/\s*\/\s*|\t+/);
+    if(parts.length<2){errors.push(`${lineIndex+1}번째 줄: / 구분자가 없어요.`);return}
+    const nickname=normalizeDebtText(parts.shift());
+    const items=parts.join('/').split(/\s*[,，]\s*/).filter(Boolean);
+    if(!nickname||!items.length){errors.push(`${lineIndex+1}번째 줄을 확인하세요.`);return}
+    items.forEach(itemText=>{
+      const item=parseDebtItem(itemText);
+      if(!item||!item.type||item.count<1){errors.push(`${lineIndex+1}번째 줄: ${itemText}`);return}
+      const key=rouletteKey(nickname,item.type);
+      const old=merged.get(key)||{nickname,type:item.type,count:0};
+      old.count+=item.count;merged.set(key,old);
+    });
+  });
+  return {items:[...merged.values()],errors};
+}
+function renderRoulettePreview(){
+  const parsed=parseRoulettePaste();
+  const groupedMap=new Map();
+  parsed.items.forEach(item=>{if(!groupedMap.has(item.nickname))groupedMap.set(item.nickname,[]);groupedMap.get(item.nickname).push(item)});
+  $('roulettePreview').innerHTML=[...groupedMap.entries()].map(([nickname,items])=>`<div class="preview-person"><b>${esc(nickname)}</b><div class="preview-chips">${items.map(i=>`<span class="preview-chip">${esc(i.type)} ×${i.count}</span>`).join('')}</div></div>`).join('')+(parsed.errors.length?`<div class="result bad">${parsed.errors.map(esc).join('<br>')}</div>`:'');
+  return parsed;
+}
+async function saveRouletteItems(items,source){
+  if(!items.length){setResult('rouletteResult','등록할 룰렛 결과가 없어요.',false);return}
+  if(items.length>200){setResult('rouletteResult','한 번에 200종류까지만 등록할 수 있어요.',false);return}
+  setResult('rouletteResult',`총 ${items.reduce((s,x)=>s+x.count,0)}개 저장 중…`,true);
+  try{
+    const result=await callApi('batchUpdateDebts',{itemsJson:JSON.stringify(items),source:source||'룰렛'});
+    setResult('rouletteResult',`${result.people}명 · ${result.types}종류 · 총 ${result.totalAdded}개를 등록했어요.`,true);
+    rouletteCart.clear();renderRouletteCart();$('roulettePaste').value='';$('roulettePreview').innerHTML='';
+    await loadDashboard();
+  }catch(error){setResult('rouletteResult',error.message,false)}
+}
+function renderBatchHistory(){
+  const rows=batchHistoryData||[];
+  $('batchHistory').innerHTML=rows.length?rows.map(row=>`<div class="batch-row"><span><b>${esc(row.people)}명</b> · ${row.types}종류 · +${row.totalAdded}개</span><small>${esc(row.time||'')}</small></div>`).join(''):'<div class="tiny">일괄 등록 기록이 없어요.</div>';
+}
+
+DEBT_TYPES.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='quick';b.textContent=t;b.onclick=()=>{document.querySelectorAll('.quick').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');$('debtType').value=t;$('debtTypeDisplay').value=t};$('quickTypes').appendChild(b)});DEBT_TYPES.forEach(t=>{const b=document.createElement('button');b.type='button';b.className='quick';b.textContent=t;b.onclick=()=>addToRouletteCart(t,1);$('rouletteQuickTypes').appendChild(b)});renderRouletteCart();
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.panel).classList.add('active')});
+$('saveSettings').onclick=saveSettings;$('loadDashboard').onclick=()=>loadDashboard().catch(()=>{});$('refreshDebtView').onclick=()=>loadDashboard().catch(()=>{});$('refreshAdminStats').onclick=()=>loadDashboard().catch(()=>{});$('adminDebtSearch').oninput=renderDebts;$('undoLast').onclick=async()=>{if(!confirm('마지막 업보 작업을 되돌릴까요?'))return;try{await callApi('undoLastDebt',{});await loadDashboard();setResult('debtResult','마지막 작업을 되돌렸어요.',true)}catch(e){setResult('debtResult',e.message,false)}};
+
+$('clearRouletteCart').onclick=()=>{rouletteCart.clear();renderRouletteCart();setResult('rouletteResult','장바구니를 비웠어요.',true)};
+$('saveRouletteCart').onclick=()=>saveRouletteItems([...rouletteCart.values()],'버튼');
+$('previewRoulettePaste').onclick=()=>{const parsed=renderRoulettePreview();setResult('rouletteResult',parsed.errors.length?'일부 줄을 확인해 주세요.':`${parsed.items.length}종류를 확인했어요.`,!parsed.errors.length)};
+$('saveRoulettePaste').onclick=()=>{const parsed=renderRoulettePreview();if(parsed.errors.length){setResult('rouletteResult','오류가 있는 줄을 먼저 고쳐 주세요.',false);return}saveRouletteItems(parsed.items,'붙여넣기')};
+$('undoLastBatch').onclick=async()=>{if(!confirm('마지막 룰렛 일괄 등록 전체를 되돌릴까요?'))return;try{const d=await callApi('undoLastBatch',{});setResult('rouletteResult',`${d.items}개 항목을 이전 수량으로 되돌렸어요.`,true);await loadDashboard()}catch(e){setResult('rouletteResult',e.message,false)}};
+$('refreshRouletteData').onclick=()=>loadDashboard().catch(()=>{});
+
+function adminColorFor(name){
+  const palettes=['#f184b0','#9f83df','#6da8cf','#70bb91','#e3a759','#d77f72','#7c9bd5','#69aaa3','#c879a8'];
+  let hash=0;for(const ch of String(name||'?')){hash=((hash<<5)-hash)+ch.charCodeAt(0);hash|=0}
+  return palettes[Math.abs(hash)%palettes.length];
+}
+function renderFanPreview(){
+  const nickname=$('fanNickname').value.trim()||'?';
+  const url=$('fanAvatar').value.trim();
+  const color=$('fanColor').value||adminColorFor(nickname);
+  const box=$('fanAvatarPreview');
+  box.style.background=`linear-gradient(145deg,${color},#b99ceb)`;
+  box.innerHTML=url
+    ? `<img src="${esc(url)}" alt="" referrerpolicy="no-referrer" onerror="this.remove();document.getElementById('fanAvatarPreview').textContent='${esc(nickname.slice(0,1)||'?')}'">`
+    : `<span>${esc(nickname.slice(0,1)||'?')}</span>`;
+}
+function loadSelectedFan(){
+  const nickname=$('fanNickname').value.trim();
+  const fan=(window.fans||[]).find(x=>x.nickname===nickname);
+  if(!fan){setResult('fanResult','해당 닉네임의 팬정보가 없어요.',false);return}
+  $('fanId').value=fan.id||'';
+  $('fanAvatar').value=fan.avatar||'';
+  $('fanColor').value=/^#[0-9a-f]{6}$/i.test(fan.color||'')?fan.color:adminColorFor(nickname);
+  $('fanAvatarMode').value='keep';
+  renderFanPreview();
+  setResult('fanResult','기존 팬정보를 불러왔어요.',true);
+}
+$('fanNickname').addEventListener('input',renderFanPreview);
+$('fanAvatar').addEventListener('input',renderFanPreview);
+$('fanColor').addEventListener('input',renderFanPreview);
+$('fanAvatarMode').addEventListener('change',()=>{
+  if($('fanAvatarMode').value==='clear')$('fanAvatar').value='';
+  renderFanPreview();
+});
+$('loadFanProfile').onclick=loadSelectedFan;
+renderFanPreview();
+
+
+$('startBroadcast').onclick=async()=>{
+  const title=$('broadcastTitle').value.trim()||'방송';
+  try{
+    const d=await callApi('startBroadcast',{title,memo:$('broadcastStartMemo').value.trim()});
+    broadcastState=d;
+    renderBroadcastState();
+    setResult('broadcastResult',`${d.startedAt}에 방송 집계를 시작했어요.`,true);
+  }catch(e){setResult('broadcastResult',e.message,false)}
+};
+$('endBroadcast').onclick=async()=>{
+  if(!confirm('방송을 종료하고 리포트를 생성할까요?'))return;
+  $('endBroadcast').disabled=true;
+  try{
+    const report=await callApi('endBroadcast',{memo:$('broadcastEndMemo').value.trim()});
+    setResult('broadcastResult',`${report.title} 리포트를 저장했어요.`,true);
+    $('broadcastEndMemo').value='';
+    await loadBroadcastData();
+    await loadDashboard();
+  }catch(e){setResult('broadcastResult',e.message,false)}
+  finally{$('endBroadcast').disabled=false;renderBroadcastState()}
+};
+$('refreshReports').onclick=loadBroadcastData;$('reportSearch').oninput=renderReports;$('reportMonthFilter').onchange=renderReports;
+$('adminSeasonFilter').onchange=()=>{adminActiveSeason=$('adminSeasonFilter').value;renderAdminSeasonAnalytics()};
+$('restoreReportsJson').onchange=async event=>{
+  const file=event.target.files?.[0];if(!file)return;
+  try{
+    const parsed=JSON.parse(await file.text());
+    if(!Array.isArray(parsed.reports)||!Array.isArray(parsed.clips))throw new Error('올바른 방송 백업 파일이 아니에요.');
+    if(!confirm(`방송기록 ${parsed.reports.length}개와 클립 ${parsed.clips.length}개로 기존 기록을 교체할까요?`))return;
+    setResult('broadcastResult','백업을 복원하는 중…',true);
+    const result=await callApi('restoreBackup',{backupJson:JSON.stringify(parsed)});
+    setResult('broadcastResult',`방송기록 ${result.reports}개, 클립 ${result.clips}개를 복원했어요.`,true);
+    await loadBroadcastData();
+  }catch(error){setResult('broadcastResult',error.message,false)}
+  finally{event.target.value=''}
+};$('exportReportsJson').onclick=()=>{const blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),reports:reportData,clips:clipData},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`honyong-broadcast-reports-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href)};
+
+bind('debtForm','updateDebt','debtResult',d=>`${d.nickname}님의 ${d.debtType}: ${d.newCount}개`,()=>loadDashboard());bind('clipForm','addClip','clipResult','클립 메모를 저장했어요.',async(_,form)=>{form.reset();await loadBroadcastData()});
+bind('fanForm','saveFan','fanResult','팬 정보를 저장했어요.',()=>loadDashboard());bind('honyoForm','saveHonyo','honyoResult','호뇽단을 저장했어요.',()=>loadDashboard());bind('noticeForm','addNotice','noticeResult','공지를 추가했어요.',(_,f)=>f.reset());bind('scheduleForm','addSchedule','scheduleResult','스케줄을 추가했어요.',(_,f)=>f.reset());bind('gameForm','saveGame','gameResult','게임을 저장했어요.');
+$('apiUrl').value=localStorage.getItem('honyong-admin-api')||'';$('adminSecret').value=localStorage.getItem('honyong-admin-secret')||'';setStatus(false,$('apiUrl').value?'연결 확인 필요':'연결 설정 필요');
+</script></body></html>

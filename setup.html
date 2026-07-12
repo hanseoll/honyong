@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>호뇽 방송 관리 시스템 · 설정</title>
+<style>
+:root{font-family:Pretendard,"Noto Sans KR",system-ui,sans-serif;--pink:#f77fae;--strong:#e95d95;--line:#f0dfe8;--ink:#4b3140;--muted:#927788}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);background:linear-gradient(180deg,#fff8fb,#fff)}
+main{width:min(820px,calc(100% - 22px));margin:22px auto 60px}
+header,.card{border:1px solid var(--line);border-radius:22px;background:#fff;box-shadow:0 14px 38px rgba(208,91,143,.08)}
+header{padding:22px;margin-bottom:14px}header h1{margin:0 0 7px;font-size:25px}header p{margin:0;color:var(--muted)}
+.card{padding:20px;margin-top:12px}.step{display:flex;align-items:center;gap:10px;margin-bottom:14px}.num{width:31px;height:31px;display:flex;align-items:center;justify-content:center;border-radius:10px;color:#fff;background:linear-gradient(135deg,#ff99bf,#e96099);font-weight:1000}
+label{display:block;margin:12px 0 6px;font-size:13px;font-weight:900}input{width:100%;padding:12px;border:1px solid var(--line);border-radius:13px;font:inherit;outline:none}input:focus{border-color:#f0a9c7;box-shadow:0 0 0 4px rgba(247,127,174,.1)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}button,a.button{border:0;border-radius:13px;padding:11px 15px;font:inherit;font-weight:900;cursor:pointer;text-decoration:none}
+.primary{color:#fff;background:linear-gradient(135deg,#ff98bf,#e96099)}.secondary{color:#765164;background:#fff;border:1px solid var(--line)}
+.result{margin-top:13px;padding:12px;border-radius:13px;background:#fff7fa;border:1px solid var(--line);font-size:13px;line-height:1.6}.ok{color:#367653;background:#effaf4}.bad{color:#a74461;background:#fff0f4}
+code{word-break:break-all}.tiny{color:var(--muted);font-size:12px;line-height:1.6}
+</style>
+</head>
+<body>
+<main>
+<header><h1>호뇽 방송 관리 시스템 설정</h1><p>v1.0 최종 설치 점검용 페이지입니다. 아래 순서대로 한 번만 확인하세요.</p></header>
+
+<section class="card">
+  <div class="step"><span class="num">1</span><b>구글시트 ID 확인</b></div>
+  <label for="sheetId">스프레드시트 ID</label>
+  <input id="sheetId" placeholder="구글시트 주소의 /d/ 와 /edit 사이 값">
+  <p class="tiny">예: docs.google.com/spreadsheets/d/<b>여기</b>/edit</p>
+</section>
+
+<section class="card">
+  <div class="step"><span class="num">2</span><b>시트 공개 확인</b></div>
+  <p class="tiny">구글시트에서 파일 → 공유 → 웹에 게시를 완료해야 공개 페이지가 데이터를 읽을 수 있습니다.</p>
+  <div class="actions"><button id="testSheet" class="primary" type="button">연결 테스트</button></div>
+  <div id="sheetResult" class="result">ID를 입력한 뒤 테스트하세요.</div>
+</section>
+
+<section class="card">
+  <div class="step"><span class="num">3</span><b>관리자 Apps Script 확인</b></div>
+  <label for="apiUrl">Apps Script 웹 앱 주소</label>
+  <input id="apiUrl" placeholder="https://script.google.com/macros/s/.../exec">
+  <label for="secret">관리자 비밀번호</label>
+  <input id="secret" type="password">
+  <div class="actions"><button id="testApi" class="primary" type="button">관리 API 테스트</button></div>
+  <div id="apiResult" class="result">웹 앱 주소와 비밀번호를 입력하세요.</div>
+</section>
+
+<section class="card">
+  <div class="step"><span class="num">4</span><b>최종 확인</b></div>
+  <p class="tiny">설정값은 이 브라우저의 관리자 페이지용 저장소에만 저장됩니다. 공개 사이트의 config.js는 마지막 배포 때 직접 반영해야 합니다.</p>
+  <div class="actions"><a class="button secondary" href="index.html">공개 페이지 열기</a><a class="button secondary" href="admin.html">관리자 페이지 열기</a></div>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const setResult=(id,msg,ok)=>{const el=$(id);el.textContent=msg;el.className='result '+(ok?'ok':'bad')};
+$('sheetId').value=localStorage.getItem('honyong-setup-sheet')||'';
+$('apiUrl').value=localStorage.getItem('honyong-admin-api')||'';
+$('secret').value=localStorage.getItem('honyong-admin-secret')||'';
+
+$('testSheet').onclick=async()=>{
+  const id=$('sheetId').value.trim();
+  if(!id)return setResult('sheetResult','스프레드시트 ID를 입력하세요.',false);
+  localStorage.setItem('honyong-setup-sheet',id);
+  setResult('sheetResult','팬정보 시트를 확인 중…',true);
+  try{
+    const url=`https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent('팬정보')}`;
+    const response=await fetch(url,{cache:'no-store'});
+    const text=await response.text();
+    if(!response.ok||/<html/i.test(text))throw new Error('웹 공개 또는 시트 이름을 확인하세요.');
+    setResult('sheetResult','구글시트 연결 성공! 팬정보 시트를 읽을 수 있어요.',true);
+  }catch(error){setResult('sheetResult','연결 실패: '+error.message,false)}
+};
+
+$('testApi').onclick=()=>{
+  const url=$('apiUrl').value.trim(),secret=$('secret').value;
+  if(!url||!secret)return setResult('apiResult','주소와 비밀번호를 모두 입력하세요.',false);
+  localStorage.setItem('honyong-admin-api',url);
+  localStorage.setItem('honyong-admin-secret',secret);
+  setResult('apiResult','관리자 페이지에 저장했습니다. admin.html에서 “설정 저장·연결 확인”을 눌러 최종 테스트하세요.',true);
+};
+</script>
+</body>
+</html>
