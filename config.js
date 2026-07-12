@@ -1,6 +1,6 @@
 window.BROADCAST_PAGE_CONFIG = {
   version: "1.0.0",
-  setupComplete: false,
+  setupComplete: true,
   // 구글시트 주소에서 /d/ 와 /edit 사이의 값을 붙여 넣으세요.
   // 예: https://docs.google.com/spreadsheets/d/여기가_ID/edit
   spreadsheetId: "18v4Kac9WIelQWG1dzFvuWOESeABwUBHug4F0QoRDW3k",
