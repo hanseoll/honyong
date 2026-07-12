@@ -3,7 +3,7 @@ window.BROADCAST_PAGE_CONFIG = {
   setupComplete: false,
   // 구글시트 주소에서 /d/ 와 /edit 사이의 값을 붙여 넣으세요.
   // 예: https://docs.google.com/spreadsheets/d/여기가_ID/edit
-  spreadsheetId: "",
+  spreadsheetId: "18v4Kac9WIelQWG1dzFvuWOESeABwUBHug4F0QoRDW3k",
 
   // 기본 시트 이름입니다. 구글시트 탭 이름을 바꾸지 않았다면 수정하지 마세요.
   sheets: {
